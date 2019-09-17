@@ -9,10 +9,10 @@ Final Project Requirements
 5. must use GitHub
 
 Step 2 Requirements (Due Sep. 23, 11:30 pm)
-O choose a project idea from the textbook or propose your own
-X have the main project's GitHub repository setup with a readme page
+choose a project idea from the textbook or propose your own (done)
+have the main project's GitHub repository setup with a readme page (done?)
   - should include all the features that your project will contain
-X project must be approved by the instructor
+project must be approved by the instructor (to do)
 
 Project Idea: general-use database
 
