@@ -18,11 +18,10 @@ public class Tag {
 
 	/**
 	 * @param value the value to set
-	 * 
-	 * TODO I think we may want to validate the String, for example limit to
-	 * a single word with no spaces? Also limit length?
 	 */
 	public void setValue(String value) {
+		// TODO I think we may want to validate value, for example maybe limit to
+		// a single word with no spaces/whitespace, probably limit length
 		this.value = value;
 	}
 
