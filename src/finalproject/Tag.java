@@ -1,4 +1,4 @@
-package edu.century.finalproject;
+package finalproject;
 
 public class Tag {
 	
