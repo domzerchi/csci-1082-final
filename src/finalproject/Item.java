@@ -42,6 +42,9 @@ public class Item {
 		ensureTagsCapacity();
 		tags[numberOfTags++] = tag;
 	}
+	public void deleteTag(Tag tag) {
+		// TODO method Stub
+	}
 
 	/**
 	 * Grow Tags[] capacity as needed
