@@ -12,5 +12,10 @@ public class Driver {
 		
 		System.out.println(gso.toString());
 		
+		gso.addTag(new Tag("Halloween"));
+		gso.addTag(new Tag("Spider"));
+		
+		System.out.println(gso.toString());
+		
 	}
 }

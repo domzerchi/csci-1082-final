@@ -6,24 +6,15 @@ public class Tag {
 
 	public Tag(String value) {
 		super();
-		// TODO I think we probably want to validate value, for example maybe limit to
-		// a single word with no spaces/whitespace, probably limit length as well
+		// TODO (maybe) limit length?
 		this.value = value;
 	}
 
-	/**
-	 * @return the value
-	 */
 	public String getValue() {
 		return value;
 	}
-
-	/**
-	 * @param value the value to set
-	 */
 	public void setValue(String value) {
-		// TODO I think we probably want to validate value, for example maybe limit to
-		// a single word with no spaces/whitespace, probably limit length as well
+		// TODO (maybe) limit length?
 		this.value = value;
 	}
 
