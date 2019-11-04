@@ -66,6 +66,7 @@ public class Item {
 				info += "\n" + tags[i].getValue();
 			}
 		}
+	// image array
 		return info;
 	}
 	
