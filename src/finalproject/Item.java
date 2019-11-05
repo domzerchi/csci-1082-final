@@ -11,7 +11,7 @@ public class Item {
 	
 	public Item(String name) {
 		this.name = name;
-		tags = new Tag[2];// TODO this is a pretty small default size, we would need to grow as needed
+		tags = new Tag[2];
 	}
 	
 	public String getName() {
@@ -50,12 +50,20 @@ public class Item {
 	 * Grow Tags[] capacity as needed
 	 */
 	private void ensureTagsCapacity() {
-		// TODO Auto-generated method stub
+		
+		if(numberOfTags >= tags.length) {
+			Tag temp[] = new Tag[1 + 2*numberOfTags]; 
+			for(int i = 0; i < tags.length; i++) {
+				temp[i] = tags[i];
+			}
+			tags = temp;
+		}
 		
 	}
 
 	@Override
 	public String toString() {
+		String indentStr = "";
 		String info = "Item: " + name;
 		if(type != null) {
 			info += "\nType: " + type;
@@ -72,5 +80,7 @@ public class Item {
 	// image array
 		return info;
 	}
+	
+	
 	
 }

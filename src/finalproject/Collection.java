@@ -41,9 +41,7 @@ public class Collection {
 	
 	public void addItem(Item newItem) {
 		ensureContentsCapacity();
-		// TODO If name is the UID of the item, we probably want to keep contents sorted by name
-		// otherwise we just add item to the end of the list 
-		// [numberOfItems++] = newItem;
+		contents[numberOfItems++] = newItem;
 	}
 	public void deleteItem(Item itemToDelete) {
 		// TODO method Stub
@@ -51,14 +49,29 @@ public class Collection {
 
 	@Override
 	public String toString() {
-		return "Collection [contents=" + Arrays.toString(contents) + ", numberOfItems=" + numberOfItems + "]";
+		String info = "Collection [contents=\n\n";
+		for(int i = 0; i < numberOfItems; i++) {
+			
+			if(contents[i] != null) {
+				info += contents[i].toString() + "\n";
+			}
+		}
+		info += "\nnumberOfItems=" + numberOfItems + "]"; 
+		return info;
 	}
 
 	/**
 	 * Grow contents[] capacity as needed
 	 */
 	private void ensureContentsCapacity() {
-		// TODO Auto-generated method stub
+
+		if(numberOfItems >= contents.length) {
+			Item temp[] = new Item[1 + 2*numberOfItems]; 
+			for(int i = 0; i < contents.length; i++) {
+				temp[i] = contents[i];
+			}
+			contents = temp;
+		}
 		
 	}
 
