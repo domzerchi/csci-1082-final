@@ -43,8 +43,19 @@ public class Collection {
 		ensureContentsCapacity();
 		contents[numberOfItems++] = newItem;
 	}
+	
 	public void deleteItem(Item itemToDelete) {
-		// TODO method Stub
+		for(int i = 0; i < numberOfItems; i++) {
+			if(contents[i] != null) {
+				if(contents[i].getName().equals(itemToDelete)) {
+					contents[i] = contents[numberOfItems - 1];
+					contents[numberOfItems - 1] = null;
+					numberOfItems--;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
