@@ -43,7 +43,7 @@ public class Item {
 		tags[numberOfTags++] = tag;
 	}
 	public void deleteTag(Tag tag) {
-		for(int i = 0; i < tag.length; i++) {
+		for(int i = 0; i < tag.getValue().length(); i++) {
 			if(tags[i] != null) {
 				if(tags[i].equals(tag)) {
 					tags[i] == null;
