@@ -44,7 +44,7 @@ public class Collection {
 		contents[numberOfItems++] = newItem;
 	}
 	
-	public void deleteItem(Item itemToDelete) {
+	public boolean deleteItem(Item itemToDelete) {
 		for(int i = 0; i < numberOfItems; i++) {
 			if(contents[i] != null) {
 				if(contents[i].getName().equals(itemToDelete)) {
