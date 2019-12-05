@@ -6,15 +6,14 @@ public class Tag {
 
 	public Tag(String value) {
 		super();
-		// TODO (maybe) limit length?
 		this.value = value;
 	}
 
 	public String getValue() {
 		return value;
 	}
+	
 	public void setValue(String value) {
-		// TODO (maybe) limit length?
 		this.value = value;
 	}
 

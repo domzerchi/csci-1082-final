@@ -1,17 +1,18 @@
 package finalproject;
 
+import java.util.ArrayList;
+
 public class Item {
 
 	private String name;
 	private String note;
 	private String type;
-	private Tag[] tags;
-	private int numberOfTags;// that we currently have in our bag of tags
+	private ArrayList<Tag> tags;
 	// image array
 	
 	public Item(String name) {
 		this.name = name;
-		tags = new Tag[2];
+		tags = new ArrayList<Tag>(10);
 	}
 	
 	public String getName() {
@@ -32,40 +33,39 @@ public class Item {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public Tag[] getTags() {
+	
+
+
+	/**
+	 * @return the tags
+	 */
+	//TODO probably make a deep copy
+	public ArrayList<Tag> getTags() {
 		return tags;
-	}
-	public void setTags(Tag[] tags) {
-		this.tags = tags;
-	}
-	public void addTag(Tag tag) {
-		ensureTagsCapacity();
-		tags[numberOfTags++] = tag;
-	}
-	public void deleteTag(Tag tag) {
-		for(int i = 0; i < tag.getValue().length(); i++) {
-			if(tags[i] != null) {
-				if(tags[i].equals(tag)) {
-					tags[i] == null;
-					// sort tags
-				}
-			}
-		}
 	}
 
 	/**
-	 * Grow Tags[] capacity as needed
+	 * @param tags the tags to set
 	 */
-	private void ensureTagsCapacity() {
-		
-		if(numberOfTags >= tags.length) {
-			Tag temp[] = new Tag[1 + 2*numberOfTags]; 
-			for(int i = 0; i < tags.length; i++) {
-				temp[i] = tags[i];
+	public void setTags(ArrayList<Tag> tags) {
+		this.tags = tags;
+	}
+
+	/**
+	 * @param tag the tag to add to tags
+	 */
+	public void addTag(Tag newTag) {
+		tags.add(newTag);
+	}
+	
+	public void deleteTag(Tag tag) {
+		for(int i = 0; i < tags.size(); i++) {
+			
+			if(tags.get(i).equals(tag)) {
+				tags.remove(i);
 			}
-			tags = temp;
+			
 		}
-		
 	}
 
 	@Override
@@ -79,10 +79,10 @@ public class Item {
 			info += "\nNotes: " + note;
 		}
 		info += "\nTags:";
-		for(int i = 0; i < numberOfTags; i++) {
-			if(tags[i] != null) {
-				info += "\n" + tags[i].getValue();
-			}
+		for(int i = 0; i < tags.size(); i++) {
+			
+				info += "\n" + tags.get(i).getValue();
+			
 		}
 	// image array
 		return info;
