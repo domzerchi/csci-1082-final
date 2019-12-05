@@ -1,5 +1,7 @@
 package finalproject;
 
+import java.util.Comparator;
+
 public class Tag {
 	
 	private String value;
@@ -40,6 +42,12 @@ public class Tag {
 		return true;
 	}
 	
-	
+public static Comparator<Tag> CompareByValue = new Comparator<Tag>() {
+		
+		@Override
+		public int compare(Tag o1, Tag o2) {
+			return o1.getValue().compareTo(o2.getValue());
+		}
+	};
 
 }

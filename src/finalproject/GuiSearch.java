@@ -1,4 +1,4 @@
-package projectfinal;
+package finalproject;
 
 import javax.swing.JFrame;
 import java.awt.BorderLayout;

@@ -1,6 +1,7 @@
 package finalproject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Item {
 
@@ -49,34 +50,32 @@ public class Item {
 	 */
 	public void setTags(ArrayList<Tag> tags) {
 		this.tags = tags;
+		Collections.sort(tags, Tag.CompareByValue);
 	}
 
 	/**
-	 * @param tag the tag to add to tags
+	 * @param newTag the tag to add to tags
+	 * if tags already contains newTag, do nothing
 	 */
 	public void addTag(Tag newTag) {
-		tags.add(newTag);
+		if(!tags.contains(newTag)) {
+			tags.add(newTag);
+			Collections.sort(tags, Tag.CompareByValue);
+		}
 	}
 	
 	public void deleteTag(Tag tag) {
-		for(int i = 0; i < tags.size(); i++) {
-			
-			if(tags.get(i).equals(tag)) {
-				tags.remove(i);
-			}
-			
-		}
+		tags.remove(tag);
 	}
 
 	@Override
 	public String toString() {
-		String indentStr = "";
-		String info = "Item: " + name;
+		String info = "Item: " + getName();
 		if(type != null) {
-			info += "\nType: " + type;
+			info += "\nType: " + getType();
 		}
 		if(note != null) {
-			info += "\nNotes: " + note;
+			info += "\nNotes: " + getNote();
 		}
 		info += "\nTags:";
 		for(int i = 0; i < tags.size(); i++) {

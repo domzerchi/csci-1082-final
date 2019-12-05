@@ -3,8 +3,6 @@
  */
 package finalproject;
 
-import java.util.Arrays;
-
 /**
  * @author stephenpolson
  *
@@ -64,7 +62,7 @@ public class Collection {
 		for(int i = 0; i < numberOfItems; i++) {
 			
 			if(contents[i] != null) {
-				info += contents[i].toString() + "\n";
+				info += contents[i].toString() + "\n" + "\n";
 			}
 		}
 		info += "\nnumberOfItems=" + numberOfItems + "]"; 
