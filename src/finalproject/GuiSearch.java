@@ -1,22 +1,16 @@
 package projectfinal;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.JDesktopPane;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import java.awt.FlowLayout;
-import javax.swing.SwingConstants;
-import javax.swing.JSplitPane;
-import javax.swing.border.BevelBorder;
 import javax.swing.JLabel;
 import java.awt.GridLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JButton;
 
 public class GuiSearch {
 
@@ -26,7 +20,6 @@ public class GuiSearch {
 	private JPanel editPanel;
 	private JPanel tagPanel;
 	private JPanel toggleSearch;
-	private JPanel searchPane;
 	private JPanel toggleImage;
 	private JLabel lblSearchBy;
 	private JCheckBox chckbxName;
@@ -34,6 +27,9 @@ public class GuiSearch {
 	private JTextField txtSearch;
 	private JCheckBox chckbxType;
 	private JCheckBox chckbxNewCheckBox;
+	private JPanel filePanel;
+	private JButton newBtn;
+	private JButton openBtn;
 
 	/**
 	 * Create the application.
@@ -57,7 +53,7 @@ public class GuiSearch {
 		frame.getContentPane().add(viewPanel);
 		
 		settingsPanel = new JPanel();
-		settingsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		settingsPanel.setBorder(null);
 		settingsPanel.setBackground(Color.WHITE);
 		settingsPanel.setBounds(399, 0, 185, 561);
 		frame.getContentPane().add(settingsPanel);
@@ -68,6 +64,7 @@ public class GuiSearch {
 		editPanel.setLayout(new GridLayout(3, 0, 0, 0));
 		
 		toggleImage = new JPanel();
+		toggleImage.setBorder(new LineBorder(new Color(0, 0, 0)));
 		toggleImage.setBackground(Color.WHITE);
 		editPanel.add(toggleImage);
 		
@@ -76,6 +73,7 @@ public class GuiSearch {
 		toggleImage.add(chckbxNewCheckBox);
 		
 		toggleSearch = new JPanel();
+		toggleSearch.setBorder(null);
 		toggleSearch.setBackground(Color.WHITE);
 		editPanel.add(toggleSearch);
 		toggleSearch.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -94,19 +92,27 @@ public class GuiSearch {
 		chckbxType = new JCheckBox("Type");
 		toggleSearch.add(chckbxType);
 		
-		searchPane = new JPanel();
-		searchPane.setBackground(Color.WHITE);
-		editPanel.add(searchPane);
-		
 		txtSearch = new JTextField();
+		editPanel.add(txtSearch);
 		txtSearch.setForeground(Color.LIGHT_GRAY);
 		txtSearch.setText("Search");
-		searchPane.add(txtSearch);
 		txtSearch.setColumns(18);
 		
 		tagPanel = new JPanel();
+		tagPanel.setBorder(null);
 		tagPanel.setBackground(Color.WHITE);
 		settingsPanel.add(tagPanel, BorderLayout.CENTER);
+		
+		filePanel = new JPanel();
+		filePanel.setBackground(Color.WHITE);
+		settingsPanel.add(filePanel, BorderLayout.SOUTH);
+		filePanel.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		newBtn = new JButton("New Database");
+		filePanel.add(newBtn);
+		
+		openBtn = new JButton("Open Database");
+		filePanel.add(openBtn);
 		frame.setBounds(600, 600, 600, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
