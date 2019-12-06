@@ -1,19 +1,10 @@
-/**
- * 
- */
 package finalproject;
 
-/**
- * @author stephenpolson
- *
- */
+
 public class Collection {
 	Item[] contents;
 	int numberOfItems;
 	
-	/**
-	 * 
-	 */
 	public Collection() {
 		super();
 		contents = new Item[99];
@@ -45,7 +36,7 @@ public class Collection {
 	public boolean deleteItem(Item itemToDelete) {
 		for(int i = 0; i < numberOfItems; i++) {
 			if(contents[i] != null) {
-				if(contents[i].getName().equals(itemToDelete)) {
+				if(contents[i].equals(itemToDelete)) {
 					contents[i] = contents[numberOfItems - 1];
 					contents[numberOfItems - 1] = null;
 					numberOfItems--;

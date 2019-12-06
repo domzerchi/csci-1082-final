@@ -5,11 +5,20 @@ import java.util.Collections;
 
 public class Item {
 
+	/**
+		 * @author stephenpolson
+		 *
+		 */
 	private String name;
 	private String note;
 	private String type;
 	private ArrayList<Tag> tags;
-	// image array
+	
+	/**
+	 * We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.
+	 */
+	private boolean tagsIsKnownToBeSorted = false;
+	//TODO image array
 	
 	public Item(String name) {
 		this.name = name;
@@ -35,13 +44,15 @@ public class Item {
 		this.type = type;
 	}
 	
-
-
 	/**
 	 * @return the tags
 	 */
 	//TODO probably make a deep copy
 	public ArrayList<Tag> getTags() {
+		if(!tagsIsKnownToBeSorted) {
+			Collections.sort(tags, Tag.CompareByValue);
+			tagsIsKnownToBeSorted = true;
+		}
 		return tags;
 	}
 
@@ -51,21 +62,24 @@ public class Item {
 	public void setTags(ArrayList<Tag> tags) {
 		this.tags = tags;
 		Collections.sort(tags, Tag.CompareByValue);
+		tagsIsKnownToBeSorted = true;
 	}
 
 	/**
 	 * @param newTag the tag to add to tags
-	 * if tags already contains newTag, do nothing
+	 * @throws TagEnteredTwiceException 
+	 * if tags already contains newTag, do nothing and throw exception
 	 */
-	public void addTag(Tag newTag) {
-		if(!tags.contains(newTag)) {
+	public void addTag(Tag newTag) throws TagEnteredTwiceException {
+		if(tags.contains(newTag)) {
+			throw new TagEnteredTwiceException();
+		}else {
 			tags.add(newTag);
-			Collections.sort(tags, Tag.CompareByValue);
 		}
 	}
 	
-	public void deleteTag(Tag tag) {
-		tags.remove(tag);
+	public boolean deleteTag(Tag tag) {
+		return tags.remove(tag);
 	}
 
 	@Override
@@ -77,16 +91,38 @@ public class Item {
 		if(note != null) {
 			info += "\nNotes: " + getNote();
 		}
+		
+		if(!tagsIsKnownToBeSorted) {
+			Collections.sort(tags, Tag.CompareByValue);
+			tagsIsKnownToBeSorted = true;
+		}
 		info += "\nTags:";
 		for(int i = 0; i < tags.size(); i++) {
 			
-				info += "\n" + tags.get(i).getValue();
+				info += "\n" + tags.get(i).toString();
 			
 		}
-	// image array
+		
+		
+		
+	//TODO image array
 		return info;
 	}
 	
-	
+public class TagEnteredTwiceException extends Exception {
+
+	private static final long serialVersionUID = 1L;
+
+	public TagEnteredTwiceException() {
+		super("That Tag has already been added!");
+	}
+
+	/**
+	 * @param message
+	 */
+	public TagEnteredTwiceException(String message) {
+		super(message);
+	}
+	}	
 	
 }

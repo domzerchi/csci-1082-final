@@ -42,6 +42,11 @@ public class Tag {
 		return true;
 	}
 	
+@Override
+	public String toString() {
+		return " #" + value;
+	}
+
 public static Comparator<Tag> CompareByValue = new Comparator<Tag>() {
 		
 		@Override
