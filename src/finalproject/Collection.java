@@ -1,78 +1,101 @@
 package finalproject;
 
+import java.util.ArrayList;
+
+import finalproject.Item.TagEnteredTwiceException;
 
 public class Collection {
-	Item[] contents;
-	int numberOfItems;
+	private String name;
+	private ArrayList<Item> contents;
+	private boolean isKnownToBeSorted = false;
 	
-	public Collection() {
+
+/**
+	 * @param name
+	 * @param contents
+	 */
+	public Collection(String name, ArrayList<Item> contents) {
 		super();
-		contents = new Item[99];
-		numberOfItems = 0;
+		this.name = name;
+		this.setContents(contents);
 	}
 	
-	public Collection(int maxNumberOfItems) {
-		contents = new Item[maxNumberOfItems];
-		numberOfItems = 0;
+/**
+	 * @param name
+	 * @param initialSize
+	 */
+	public Collection(String name, int initialSize) {
+		super();
+		this.name = name;
+		setContents(new ArrayList<Item>(initialSize));
+	}
+
+	/**
+	 * @param name
+	 */
+	public Collection(String name) {
+		super();
+		this.name = name;
+		setContents(new ArrayList<Item>());
 	}
 	
-	public Collection(Item[] initialSetOfItems) {
-		contents = new Item[ 2*initialSetOfItems.length ];
-		numberOfItems = 0;
-		
-		for(int i = 0; i < initialSetOfItems.length; i++) {
-			if(initialSetOfItems[i] != null) {
-				numberOfItems++;
-				contents[i] = initialSetOfItems[i];
-			}
+	/**
+	 * @param newItem the Item to add to contents
+	 * @throws ItemEnteredTwiceException 
+	 * if contents already contains newItem, do nothing and throw exception
+	 */
+	public void addItem(Item newItem) throws ItemEnteredTwiceException {
+		if(getContents().contains(newItem)) {
+			throw new ItemEnteredTwiceException();
+		}else {
+			getContents().add(newItem);
 		}
 	}
 	
-	public void addItem(Item newItem) {
-		ensureContentsCapacity();
-		contents[numberOfItems++] = newItem;
+	public boolean deleteItem(Item itemToRemove) {
+		return getContents().remove(itemToRemove);
 	}
 	
-	public boolean deleteItem(Item itemToDelete) {
-		for(int i = 0; i < numberOfItems; i++) {
-			if(contents[i] != null) {
-				if(contents[i].equals(itemToDelete)) {
-					contents[i] = contents[numberOfItems - 1];
-					contents[numberOfItems - 1] = null;
-					numberOfItems--;
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 
 	@Override
 	public String toString() {
 		String info = "Collection [contents=\n\n";
-		for(int i = 0; i < numberOfItems; i++) {
+		for(int i = 0; i < getContents().size(); i++) {
 			
-			if(contents[i] != null) {
-				info += contents[i].toString() + "\n" + "\n";
-			}
+			info += "\n" + getContents().get(i).toString();
 		}
-		info += "\nnumberOfItems=" + numberOfItems + "]"; 
+		info += "\nnumberOfItems=" + getContents().size() + "]"; 
 		return info;
+	}
+	
+	/**
+	 * @return the contents
+	 */
+	public ArrayList<Item> getContents() {
+		return contents;
 	}
 
 	/**
-	 * Grow contents[] capacity as needed
+	 * @param contents the contents to set
 	 */
-	private void ensureContentsCapacity() {
-
-		if(numberOfItems >= contents.length) {
-			Item temp[] = new Item[1 + 2*numberOfItems]; 
-			for(int i = 0; i < contents.length; i++) {
-				temp[i] = contents[i];
-			}
-			contents = temp;
-		}
-		
+	public void setContents(ArrayList<Item> contents) {
+		this.contents = contents;
 	}
+
+	public class ItemEnteredTwiceException extends Exception {
+
+		private static final long serialVersionUID = 1L;
+
+		public ItemEnteredTwiceException() {
+			super("That Item has already been added!");
+		}
+
+		/**
+		 * @param message
+		 */
+		public ItemEnteredTwiceException(String message) {
+			super(message);
+		}
+		}	
 
 }

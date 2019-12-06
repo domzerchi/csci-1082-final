@@ -9,7 +9,7 @@ public class Item {
 		 * @author stephenpolson
 		 *
 		 */
-	private String name;
+	private String value;//value = name
 	private String note;
 	private String type;
 	private ArrayList<Tag> tags;
@@ -17,19 +17,24 @@ public class Item {
 	/**
 	 * We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.
 	 */
-	private boolean tagsIsKnownToBeSorted = false;
+	private boolean isKnownToBeSorted = false;
 	//TODO image array
 	
 	public Item(String name) {
-		this.name = name;
-		tags = new ArrayList<Tag>(10);
+		this.value = name;
+		tags = new ArrayList<Tag>();
+	}
+	
+	public Item(String name, int initialSize) {
+		this.value = name;
+		tags = new ArrayList<Tag>(initialSize);
 	}
 	
 	public String getName() {
-		return name;
+		return value;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.value = name;
 	}
 	public String getNote() {
 		return note;
@@ -49,9 +54,9 @@ public class Item {
 	 */
 	//TODO probably make a deep copy
 	public ArrayList<Tag> getTags() {
-		if(!tagsIsKnownToBeSorted) {
+		if(!isKnownToBeSorted) {
 			Collections.sort(tags, Tag.CompareByValue);
-			tagsIsKnownToBeSorted = true;
+			isKnownToBeSorted = true;
 		}
 		return tags;
 	}
@@ -62,7 +67,7 @@ public class Item {
 	public void setTags(ArrayList<Tag> tags) {
 		this.tags = tags;
 		Collections.sort(tags, Tag.CompareByValue);
-		tagsIsKnownToBeSorted = true;
+		isKnownToBeSorted = true;
 	}
 
 	/**
@@ -92,9 +97,9 @@ public class Item {
 			info += "\nNotes: " + getNote();
 		}
 		
-		if(!tagsIsKnownToBeSorted) {
+		if(!isKnownToBeSorted) {
 			Collections.sort(tags, Tag.CompareByValue);
-			tagsIsKnownToBeSorted = true;
+			isKnownToBeSorted = true;
 		}
 		info += "\nTags:";
 		for(int i = 0; i < tags.size(); i++) {
@@ -109,6 +114,31 @@ public class Item {
 		return info;
 	}
 	
+@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Item other = (Item) obj;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
+			return false;
+		return true;
+	}
+
 public class TagEnteredTwiceException extends Exception {
 
 	private static final long serialVersionUID = 1L;

@@ -2,10 +2,11 @@ package finalproject;
 
 import java.util.ArrayList;
 
+import finalproject.Collection.ItemEnteredTwiceException;
 import finalproject.Item.TagEnteredTwiceException;
 
 public class Driver {
-	public static void main(String[] args) throws TagEnteredTwiceException {
+	public static void main(String[] args) throws TagEnteredTwiceException, ItemEnteredTwiceException {
 	
 		/**
 		 * Launch the application.
@@ -51,7 +52,7 @@ public class Driver {
 			another.addTag(fake);
 		}
 		catch(TagEnteredTwiceException e) {
-			System.out.println("Tag" + fake.toString() + " has already been added!\n");
+			System.out.println("\nTag" + fake.toString() + " has already been added!\n");
 		}
 		
 		System.out.println(another.toString());
@@ -71,13 +72,14 @@ public class Driver {
 		
 		another.setTags(differentTags);
 		
-		Collection bugs = new Collection();
+		Collection bugs = new Collection("bugs");
 		bugs.addItem(gso);
 		bugs.addItem(another);
 		
 		System.out.println(bugs.toString());
+		System.out.println("\n");
 		
-		if(bugs.deleteItem(new Item("Tarantula")) == false) System.out.println("Item not found!");
+		if(bugs.deleteItem(new Item("Poecilotheria Metallica")) == false) System.out.println("Item not found!");
 		else System.out.println(bugs.toString());
 		
 		
