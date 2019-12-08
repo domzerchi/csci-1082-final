@@ -1,0 +1,132 @@
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.BorderLayout;
+import javax.swing.SwingConstants;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+
+public class GuiItem {
+
+	private JFrame frame;
+	private JPanel imgPnl;
+	private JPanel editPnl;
+	private JPanel helperPnl;
+	private JLabel nameLbl;
+	private JButton backBtn;
+	private JTextField typeFld;
+	private JTextField tagFld;
+	private JLabel typeLbl;
+	private JLabel addTagLbl;
+	private JPanel typePnl;
+	private JPanel tagPnl;
+	private JPanel tagsPnl;
+	private JTextArea notesArea;
+	private JScrollPane scrollPane;
+	private JPanel notesPnl;
+
+	/**
+	 * Launch the application.
+	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					GuiItem window = new GuiItem();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+
+	/**
+	 * Create the application.
+	 */
+	public GuiItem() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		imgPnl = new JPanel();
+		frame.getContentPane().add(imgPnl, BorderLayout.CENTER);
+		
+		editPnl = new JPanel();
+		frame.getContentPane().add(editPnl, BorderLayout.EAST);
+		editPnl.setLayout(new BorderLayout(0, 0));
+		
+		helperPnl = new JPanel();
+		editPnl.add(helperPnl, BorderLayout.NORTH);
+		helperPnl.setLayout(new GridLayout(4, 0, 0, 0));
+		
+		nameLbl = new JLabel("*database title*");
+		nameLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		helperPnl.add(nameLbl);
+		
+		backBtn = new JButton("Back to Search");
+		helperPnl.add(backBtn);
+		
+		typePnl = new JPanel();
+		typePnl.setBackground(Color.WHITE);
+		helperPnl.add(typePnl);
+		typePnl.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		
+		typeLbl = new JLabel("Type:");
+		typePnl.add(typeLbl);
+		typeLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		typeFld = new JTextField();
+		typeFld.setText("test");
+		typeFld.setHorizontalAlignment(SwingConstants.LEFT);
+		typePnl.add(typeFld);
+		typeFld.setColumns(10);
+		
+		tagPnl = new JPanel();
+		helperPnl.add(tagPnl);
+		tagPnl.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		
+		addTagLbl = new JLabel("Add Tag:");
+		tagPnl.add(addTagLbl);
+		addTagLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		tagFld = new JTextField();
+		tagPnl.add(tagFld);
+		tagFld.setColumns(10);
+		
+		tagsPnl = new JPanel();
+		editPnl.add(tagsPnl, BorderLayout.CENTER);
+		
+		notesPnl = new JPanel();
+		frame.getContentPane().add(notesPnl, BorderLayout.SOUTH);
+		notesPnl.setLayout(new BorderLayout(0, 0));
+		
+		notesArea = new JTextArea(12, 12);
+		notesPnl.add(notesArea, BorderLayout.CENTER);
+		notesArea.setLineWrap(true);
+		notesArea.setWrapStyleWord(true);
+		notesArea.setText("The Mogeko voice is from the voice synthesizing program SofTalk and is also known as the Yukkuri voice. (I'm pretty sure it's that and not Defoko/AquesTalk.)\r\n\r\nThe English equivalent would basically be Microsoft Sam, which I considered actually replacing it with for the intro warning, but decided it wouldn't work very well for the rest of the voice clips.\r\n\r\n\r\nThough in the other games I translated \u751F\u30CF\u30E0 as \"raw ham\" and \u30D7\u30ED\u30B7\u30E5\u30C3\u30C8 as \"prosciutto,\" I did away with that difference this time. It's just more consistent, and the original romanizations in the character bios always used \"prosciutto\" for \"nama-hamu.\"\r\n\r\n\r\nMost of the Mogekos are \u30E2\u30B2\u30B3 (katakana). Moge-ko is \u3082\u3052\u5B50 (hiragana, and the \"ko\" as a kanji common at the end of girl names). I sort of imagine one as \"Mo-geck-oh\" and the other as \"Mo-geh-ko,\" though in truth it would be the latter for both.\r\n\r\n\"Mogeco\" could have worked as an alternative, since Mogeko romanizes the names of several of their \"cute\" characters with c's (Lobco, Peroco, Memoca). It didn't really cross my mind (probably because she's more terrifying than anything), and it was originally romanized in her bio as just \"Mogeko\" so that didn't help either.\r\n\r\nAlso, (King) mogeko is \u3082\u3052\u3053 (all hiragana), which is how the author writes their name. This same duality will apparently return in Mogeko Castle Gaiden: the main character is Mogekov (\u30E2\u30B2\u30B3\u30D5), but the preview shows a humanoid girl named mogekov (\u3082\u3052\u3053\u3075).\r\n\r\n\r\nThe haiku about the cuckoo is a parody of the famous haiku: \u9CF4\u304B\u306C\u306A\u3089 \u9CF4\u304F\u307E\u3067\u5F85\u3068\u3046 \u30DB\u30C8\u30C8\u30AE\u30B9. It also seems rather popular to replace the middle line with something else, which is what happened here.\r\n\r\n\r\n\"hamazon.co.jp\" was all Mogeko, I will not take credit for that brilliance. (However, the \"suna\" also makes it a play on \"sunahama,\" sandy beach. Which is a relatively uncommon Mogeko-ism, but I guess it ties into all the seafood ones.)\r\n\r\n\r\n\"Praise be to Prosciutto\" was \"nama-hamu namusan.\" Namusan is a word in Buddhism that's similar to \"amen,\" but everyone knows it because of Byakuren from Touhou. \"Know thyham\" comes from \"know thyself.\"\r\n\r\n\r\nI generally assumed that the Mogekos were male, if only because of how they treat high-school girls. However, Prosciutto Fairy is quite effeminate, using \"atashi\" and so forth. And there's one called Stephanie.\r\n\r\n\r\nThe \"breadboard\" riddle (?) was originally a very clich\u00E9 Japanese pun: \"What kind of bread (pan) can you not eat? Frying pan!\" Since bread is featured in the image, I had to keep that part.\r\n\r\nI wanted to do \"a thoroughbred,\" but it didn't make much sense that eating a horse would kill you. (I'm so hungry, I ate a horse! Umai.)\r\n\r\nBut also it seemed weird to treat a word that starts with \"bread\" instead of ending with it as \"a kind of bread,\" so I reworded the question to have the Mogeko list two kinds of food that start with bread.\r\n\r\n\r\nDefect Mogeko was \"Itan Mogeko,\" literally \"heretic Mogeko.\" I could have gone with that, but it didn't flow as well as a name, and I liked the idea that he's not only a \"defector,\" but \"defective\" - which is highly ironic considering how messed up the regular Mogekos are.\r\n\r\nMofuko and Moffuru come from \"mofumofu,\" fluffy. Mogecuckoo was \"Mogekokko,\" from the Japanese equivalent of \"cockadoodledoo.\"\r\nNega-Mogeko was \"Ura Mogeko\" - oddly, the Mogeko there is in katakana. This was rather literally translated in the original bio as \"Under Mogeko,\" but, uh... (Does that make King mogeko Over Mogeko?)\r\n\r\n\r\nHasu's name and Hashasky come from \"hasuhasu,\" which is slang used to mean sniffing someone in an aroused way. For example, in the context of Mogekos, going up to a high school girl and panting \"Yonaka-tan hshs <3.\"\r\n\r\nAny kind of word/sound for heavy breathing would probably be appropriate - I kinda like \"huff-huff,\" so that's why I did Huffspray (originally Haasujetto, a play on Aasujetto/Earthjet) - but it didn't seem right for \"Hasu\" or \"Hashasky,\" so I left those. (...David Hammelhuff?)\r\n\r\n\r\nMoge-ko's bio really was a Powerpuff Girls reference; sugar becomes \"candy,\" spice becomes \"tabasco,\" and everything nice becomes \"everything neat.\" Technically \"everything nice\" (suteki na mono) was unchanged, but it sounded funnier to slightly change that too.\r\n\r\n\r\nLastly, since it's not easily noticeable: if you \"spend a sweet night\" with that one Mogeko, Yonaka's school ID changes from saying \"Female Student\" to \"Woman.\"\r\n\r\n\r\n\r\nDouble lastly, since people are finally questioning That Orange Thing, the most we know about it comes from a picture that used to be on the FAQ page of Mogeko's site:\r\n\r\n\"Mogekos: A people who love sake, prosciutto, and peperoncino.\r\nTori-san [Bird]: Masters of silence. Chirp chirp. Find the beak!\r\nEvil Tori-san: A Tori-san who chose the path of evil. The other side of Tori-san.\"\r\n\r\nSo yes, they're Punpun. While it is possible there's only one Tori-san who is just everywhere (since the plurality here is ambiguous), it seems unlikely since they're lumped with Mogekos.\r\n\r\nNote that in Wadanohara, I mistakenly called the Tori-san seabathing and wasting time in caves \"fish\" when it just said \u8005 - when I made the 1.02 update, I changed those to \"Bird.\" However, the one that appears at the banquet is indeed called \"Fish.\" So, uh.\r\n\r\n\r\n\r\nAnd super-lastly, here's something Mogeko said in an email after I showed them the translation, maybe in response to what I said on the page about the \"ages 15 and up\" rating:\r\n\r\n\"This game is R-15, but in the English community, that designation might be a little harsher... :)\r\n(I've heard that regulation of sexual and violent content is more strict than in Japan.)\"\r\n\r\n\r\n\r\n\r\n...Mostly I'm just surprised Mogeko used a plain \":)\" emoticon. ^o^ ");
+		
+		scrollPane = new JScrollPane(notesArea);
+		notesPnl.add(scrollPane, BorderLayout.NORTH);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		frame.setBounds(0, 0, 600, 600);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+
+}
