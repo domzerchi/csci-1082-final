@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import finalproject.Item.TagEnteredTwiceException;
 
+/**
+ * @author stephenpolson aydensinn
+ * 
+ * A Collection object essentially organizes all the objects in a database.
+ *
+ */
 public class Collection {
 	private String name;
 	private ArrayList<Item> contents;
@@ -62,7 +68,7 @@ public class Collection {
 		String info = "Collection [contents=\n\n";
 		for(int i = 0; i < getContents().size(); i++) {
 			
-			info += "\n" + getContents().get(i).toString();
+			info += "\n\n" + getContents().get(i).toString();
 		}
 		info += "\nnumberOfItems=" + getContents().size() + "]"; 
 		return info;

@@ -1,5 +1,6 @@
 package finalproject;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -13,6 +14,7 @@ public class Item {
 	private String note;
 	private String type;
 	private ArrayList<Tag> tags;
+	private BufferedImage img;
 	
 	/**
 	 * We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.
@@ -137,6 +139,20 @@ public class Item {
 		} else if (!value.equals(other.value))
 			return false;
 		return true;
+	}
+
+/**
+	 * @return the img
+	 */
+	public BufferedImage getImg() {
+		return img;
+	}
+
+	/**
+	 * @param img the img to set
+	 */
+	public void setImg(BufferedImage img) {
+		this.img = img;
 	}
 
 public class TagEnteredTwiceException extends Exception {
