@@ -1,10 +1,19 @@
 package finalproject;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class Tag {
+public class Tag implements Serializable {
 	
 	private String value;
+
+	/**
+	 * 
+	 */
+	public Tag() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public Tag(String value) {
 		super();

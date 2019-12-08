@@ -1,10 +1,11 @@
 package finalproject;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Item {
+public class Item implements Serializable {
 
 	/**
 		 * @author stephenpolson
@@ -20,8 +21,15 @@ public class Item {
 	 * We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.
 	 */
 	private boolean isKnownToBeSorted = false;
-	//TODO image array
 	
+	/**
+	 * 
+	 */
+	public Item() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public Item(String name) {
 		this.value = name;
 		tags = new ArrayList<Tag>();

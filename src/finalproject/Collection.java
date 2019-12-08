@@ -1,5 +1,6 @@
 package finalproject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import finalproject.Item.TagEnteredTwiceException;
@@ -10,7 +11,16 @@ import finalproject.Item.TagEnteredTwiceException;
  * A Collection object essentially organizes all the objects in a database.
  *
  */
-public class Collection {
+
+public class Collection implements Serializable {
+	/**
+	 * 
+	 */
+	public Collection() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	private String name;
 	private ArrayList<Item> contents;
 	private boolean isKnownToBeSorted = false;
@@ -62,6 +72,20 @@ public class Collection {
 		return getContents().remove(itemToRemove);
 	}
 	
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	@Override
 	public String toString() {

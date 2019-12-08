@@ -6,6 +6,7 @@ package finalproject;
 import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -52,6 +53,14 @@ public class Driver2 {
 			
 			System.out.println(bugs.toString());
 			System.out.println("\n");
-	}
+			
+//			String databaseName = bugs.getName();
+//			try {
+//				FileOutputStream fileOut = new FileOutputStream(new File(databaseName));
+//				fileOut.writeObject(bugs);
+//				fileOut.close();
+//			}
+			
+			}
 
 }
