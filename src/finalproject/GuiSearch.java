@@ -7,30 +7,48 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import java.awt.FlowLayout;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
-public class GuiSearch {
+public class GuiSearch extends JFrame implements ActionListener {
 
 	private JFrame frame;
+	
 	private JPanel DisplayPanel;
 	private JPanel editPnl;
-	private JLabel titleLbl;
-	private JTextField searchFld;
 	private JPanel toggleSearchPnl;
+	private JPanel settingsPnl;
+	private JPanel filePnl;
+	
+	private JLabel titleLbl;
 	private JLabel searchByLbl;
+	
+	private JTextField searchFld;
+	private JTextField addTagFld;
+	
 	private JCheckBox nameChkbx;
 	private JCheckBox tagChkbx;
 	private JCheckBox toggleImgChkbx;
-	private JPanel searchPnl;
-	private JPanel tagPnl;
-	private JTextField addTagFld;
-	private JPanel addedTagsPnl;
-	private JPanel filePnl;
+	
 	private JButton newClxnBtn;
 	private JButton openClxnBtn;
+	private JTextField newItemFld;
+	private JPanel searchPnl;
+	private JLabel searchLbl;
+	private JPanel itemPnl;
+	private JLabel itemLbl;
+	private JPanel panel;
+	private JPanel tagPnl;
 
+	private JScrollPane scrollPane;
+	
 	/**
 	 * Create the application.
 	 */
@@ -50,20 +68,28 @@ public class GuiSearch {
 		frame.getContentPane().add(editPnl, BorderLayout.EAST);
 		editPnl.setLayout(new BorderLayout(0, 0));
 		
-		searchPnl = new JPanel();
-		editPnl.add(searchPnl, BorderLayout.NORTH);
-		searchPnl.setLayout(new GridLayout(4, 0, 0, 0));
+		settingsPnl = new JPanel();
+		editPnl.add(settingsPnl, BorderLayout.NORTH);
+		settingsPnl.setLayout(new GridLayout(6, 0, 0, 0));
 		
 		titleLbl = new JLabel("*database*");
 		titleLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		searchPnl.add(titleLbl);
+		settingsPnl.add(titleLbl);
+		
+		searchPnl = new JPanel();
+		settingsPnl.add(searchPnl);
+		searchPnl.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		searchLbl = new JLabel("Search");
+		searchPnl.add(searchLbl);
 		
 		searchFld = new JTextField();
 		searchPnl.add(searchFld);
+		searchFld.setForeground(Color.BLACK);
 		searchFld.setColumns(10);
 		
 		toggleSearchPnl = new JPanel();
-		searchPnl.add(toggleSearchPnl);
+		settingsPnl.add(toggleSearchPnl);
 		
 		searchByLbl = new JLabel("Search by:");
 		toggleSearchPnl.add(searchByLbl);
@@ -75,18 +101,33 @@ public class GuiSearch {
 		toggleSearchPnl.add(tagChkbx);
 		
 		toggleImgChkbx = new JCheckBox("Show Images");
-		searchPnl.add(toggleImgChkbx);
+		settingsPnl.add(toggleImgChkbx);
+		
+		itemPnl = new JPanel();
+		settingsPnl.add(itemPnl);
+		
+		itemLbl = new JLabel("Add Item");
+		itemPnl.add(itemLbl);
+		
+		newItemFld = new JTextField();
+		itemPnl.add(newItemFld);
+		newItemFld.setForeground(Color.BLACK);
+		newItemFld.setColumns(10);
+		
+		panel = new JPanel();
+		settingsPnl.add(panel);
+		
+		addTagFld = new JTextField();
+		panel.add(addTagFld);
+		addTagFld.setForeground(Color.LIGHT_GRAY);
+		addTagFld.setText("Add Tag");
+		addTagFld.setColumns(10);
 		
 		tagPnl = new JPanel();
 		editPnl.add(tagPnl, BorderLayout.CENTER);
-		tagPnl.setLayout(new BorderLayout(0, 0));
-		
-		addTagFld = new JTextField();
-		tagPnl.add(addTagFld, BorderLayout.NORTH);
-		addTagFld.setColumns(10);
-		
-		addedTagsPnl = new JPanel();
-		tagPnl.add(addedTagsPnl);
+		scrollPane = new JScrollPane();
+		tagPnl.add(scrollPane);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		filePnl = new JPanel();
 		editPnl.add(filePnl, BorderLayout.SOUTH);
@@ -104,6 +145,36 @@ public class GuiSearch {
 		frame.setBounds(0, 0, 600, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		setActionListener();
 	}
 
+	private void setActionListener() {
+		searchFld.addActionListener(this);
+		addTagFld.addActionListener(this);
+		nameChkbx.addActionListener(this);
+		tagChkbx.addActionListener(this);
+		toggleImgChkbx.addActionListener(this);
+		newClxnBtn.addActionListener(this);
+		openClxnBtn.addActionListener(this);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == searchFld) {
+			
+		} else if (event.getSource() == addTagFld) {
+			
+		} else if (event.getSource() == nameChkbx) {
+			
+		} else if (event.getSource() == tagChkbx) {
+			
+		} else if (event.getSource() == toggleImgChkbx) {
+			
+		} else if (event.getSource() == newClxnBtn) {
+			
+		} else if (event.getSource() == openClxnBtn) {
+			
+		}
+	}
+	
 }
