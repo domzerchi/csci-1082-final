@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -16,20 +17,13 @@ import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 import java.awt.FlowLayout;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
-import java.awt.Component;
 
 public class GuiSearch extends JFrame implements ActionListener {
 
 	private JFrame frame;
-	
-	private JPanel displayPnl;
 	private JPanel editPnl;
 	private JPanel toggleSearchPnl;
 	private JPanel settingsPnl;
@@ -62,6 +56,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 	private boolean tagX = false;
 	private boolean imgX = false;
 	private JButton newItemBtn;
+	private JPanel displayPnl;
 	
 	/**
 	 * Create the application.
@@ -163,19 +158,19 @@ public class GuiSearch extends JFrame implements ActionListener {
 		ClxnBtn = new JButton("Create/Open Database...");
 		filePnl.add(ClxnBtn);
 		
-		displayPnl = new JPanel();
+		displayPnl = new JPanel(); // not scrollable because I am not smart
+		frame.getContentPane().add(displayPnl, BorderLayout.CENTER);
 		FlowLayout flowLayout = (FlowLayout) displayPnl.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		displayPnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		displayPnl.setBackground(Color.WHITE);
-		frame.getContentPane().add(displayPnl, BorderLayout.CENTER);
 		
 		frame.setBounds(0, 0, 600, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		setActionListener();
 	}
-
+	
 	private void setActionListener() {
 		searchFld.addActionListener(this);
 		nameChkbx.addActionListener(this);
@@ -198,10 +193,13 @@ public class GuiSearch extends JFrame implements ActionListener {
 			checkBox(imgX);
 		} else if (event.getSource() == addItemFld) {
 			addItem();
-		} else if (event.getSource() == addTagFld) { // why isn't this working??
+		} else if (event.getSource() == addTagFld) {
 			addTag();
 		} else if (event.getSource() == ClxnBtn) {
 			fileChooser();
+		} else {
+			checkTags(event);
+			checkItems(event);
 		}
 	}
 
@@ -221,6 +219,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 		newItemBtn.setPreferredSize(new Dimension(100, 100));
 		displayPnl.add(newItemBtn);
 		displayPnl.revalidate();
+		newItemBtn.addActionListener(this);
 		items.add(newItemBtn);
 		addItemFld.setText("");
 	}
@@ -230,12 +229,41 @@ public class GuiSearch extends JFrame implements ActionListener {
 		JButton newTagBtn = new JButton(addTagFld.getText());
 		tagsPnl.add(newTagBtn);
 		tagsPnl.revalidate();
+		newTagBtn.addActionListener(this);
 		tags.add(newTagBtn);
 		addTagFld.setText("");
 		}
 	}
 	
-	private void fileChooser() { // don't know how to do thingsssss
-
+	private void fileChooser() { 
+		// don't know how to do thingsssss
 	}
+	
+	private void checkTags(ActionEvent event) {
+		for (JButton tag: tags) {
+			if (event.getSource() == tag) {
+				tagsPnl.remove(tag);
+				tagsPnl.revalidate();
+				tagsPnl.repaint();
+				break;
+			}
+		}
+	}
+	
+	private void checkItems(ActionEvent event) {
+		for (JButton item: items) {
+			if ( event.getSource() == item) {
+				EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						GuiItem window = new GuiItem();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			}
+		}
+	}
+	
 }
