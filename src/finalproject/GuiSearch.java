@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import finalproject.Collection.ItemEnteredTwiceException;
+import projectfinal.Collection.ItemEnteredTwiceException;
 
 public class GuiSearch extends JFrame implements ActionListener {
 
@@ -204,9 +204,9 @@ public class GuiSearch extends JFrame implements ActionListener {
 		} else if (event.getSource() == tagChkbx) {
 			checkBox(tagX);
 		} else if (event.getSource() == deleteItemFld) {
-			checkBox(imgX);
+			deleteItem(event);
 		} else if (event.getSource() == addItemFld) {
-			addItem(event);
+			addItem();
 		} else if (event.getSource() == addTagFld) {
 			addTag();
 		} else if (event.getSource() == ClxnBtn) {
@@ -217,7 +217,8 @@ public class GuiSearch extends JFrame implements ActionListener {
 		}
 	}
 
-	private void search() { // disaster zone
+							// disaster zone
+	private void search() { // searching by name AND tag doesn't work correctly
 		displayPnl.removeAll();
 		if (addItemFld.getText().trim().isEmpty()) {
 			for (int i = 0; i < data.getContents().size(); i++) {
@@ -261,7 +262,20 @@ public class GuiSearch extends JFrame implements ActionListener {
 			x = false;
 	}
 	
-	private void addItem(ActionEvent event) {
+	private void deleteItem(ActionEvent event) {
+		Item oldItem = new Item(deleteItemFld.getText());
+		for (JButton item: items) {
+			if (event.getSource() == item) {
+				displayPnl.remove(item);
+				displayPnl.revalidate();
+				displayPnl.repaint();
+				data.deleteItem(oldItem);
+				break;
+			}
+		}
+	}
+	
+	private void addItem() {
 		Item newItem = new Item(addItemFld.getText());
 		try {
 			if (!addItemFld.getText().trim().isEmpty()) {
@@ -292,11 +306,11 @@ public class GuiSearch extends JFrame implements ActionListener {
 		}
 	}
 	
-	private void fileChooser() { 
-		// don't know how to do thingsssss
-		
-		
-		
+	private void fileChooser() { // not finished
+		// close guiSearch window
+		ChooseFile fileChooser = new ChooseFile();
+		fileChooser.setVisible(true);
+		frame.dispose();
 	}
 	
 	private void checkTags(ActionEvent event) {
@@ -326,8 +340,6 @@ public class GuiSearch extends JFrame implements ActionListener {
 			}
 		}
 	}
-	
-	
 	
 }
 
