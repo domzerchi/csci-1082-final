@@ -1,5 +1,6 @@
 package finalproject;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -82,7 +83,7 @@ public class Collection implements Serializable {
 	}
 	
 	public void saveCollection() throws IOException {
-		String fileName=name+".ser";
+		String fileName="DatabaseFiles" + File.separator + name+".ser";
 		FileOutputStream fout = new FileOutputStream(fileName);
 		ObjectOutputStream oos = new ObjectOutputStream(fout);
 		oos.writeObject(this);
@@ -90,7 +91,7 @@ public class Collection implements Serializable {
 	}
 	
 	public Collection readCollection(String databaseToRead) throws FileNotFoundException, IOException, ClassNotFoundException {
-		String fileName=databaseToRead+".ser";
+		String fileName="DatabaseFiles" + File.separator + databaseToRead+".ser";
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
 		Collection database;
 		database = (Collection)ois.readObject();
