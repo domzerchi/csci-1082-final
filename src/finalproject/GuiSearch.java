@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import projectfinal.Collection.ItemEnteredTwiceException;
+import finalproject.Collection.ItemEnteredTwiceException;
 
 public class GuiSearch extends JFrame implements ActionListener {
 
