@@ -65,15 +65,17 @@ public class GuiItem extends JFrame implements ActionListener {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	public GuiItem() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		
-		imgPnl = new JPanel();
-		imgPnl.setBackground(Color.WHITE);
-		imgPnl.setBorder(new LineBorder(new Color(0, 0, 0)));
-		frame.getContentPane().add(imgPnl, BorderLayout.CENTER);
 		
 		editPnl = new JPanel();
 		editPnl.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -132,7 +134,7 @@ public class GuiItem extends JFrame implements ActionListener {
 		savePnl.add(saveBtn);
 		
 		notesPnl = new JPanel();
-		frame.getContentPane().add(notesPnl, BorderLayout.SOUTH);
+		frame.getContentPane().add(notesPnl, BorderLayout.CENTER);
 		notesPnl.setLayout(new BorderLayout(0, 0));
 		
 		notesArea = new JTextArea();
@@ -146,7 +148,7 @@ public class GuiItem extends JFrame implements ActionListener {
 		notesPnl.add(scroll);
 
 		frame.setBounds(0, 0, 600, 600);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);
 		setActionListener();
 	}
