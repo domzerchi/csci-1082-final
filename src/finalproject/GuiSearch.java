@@ -21,6 +21,8 @@ import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
 
+import projectfinal.Collection.ItemEnteredTwiceException;
+
 public class GuiSearch extends JFrame implements ActionListener {
 
 	private JFrame frame;
@@ -48,7 +50,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 	private JPanel tagPnl;
 	private JPanel tagsPnl;
 	private JLabel tagLbl;
-	Collection data = new Collection("data");
+	Collection data = new Collection("New Database");
 	ArrayList<JButton> items = new ArrayList<>();
 	ArrayList<JButton> tags = new ArrayList<>();
 	
@@ -192,7 +194,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 		} else if (event.getSource() == toggleImgChkbx) {
 			checkBox(imgX);
 		} else if (event.getSource() == addItemFld) {
-			addItem();
+			addItem(event);
 		} else if (event.getSource() == addTagFld) {
 			addTag();
 		} else if (event.getSource() == ClxnBtn) {
@@ -214,12 +216,25 @@ public class GuiSearch extends JFrame implements ActionListener {
 			x = false;
 	}
 	
-	private void addItem() {
+	private void addItem(ActionEvent event) { // check that item doesn't already exist when creating a button
+		for (int i = 0; i < items.size(); i++) {
+			if (addItemFld.getText() == items.get(i).getText()) {
+				addItemFld.setText("Item already exists!");
+				break;
+			}
+		}
 		newItemBtn = new JButton(addItemFld.getText());
 		newItemBtn.setPreferredSize(new Dimension(100, 100));
 		displayPnl.add(newItemBtn);
 		displayPnl.revalidate();
 		newItemBtn.addActionListener(this);
+
+		Item newItem = new Item(addItemFld.getText());
+		try {
+			data.addItem(newItem);
+		} catch (ItemEnteredTwiceException e) {
+			e.printStackTrace();
+		}
 		items.add(newItemBtn);
 		addItemFld.setText("");
 	}
@@ -245,6 +260,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 				tagsPnl.remove(tag);
 				tagsPnl.revalidate();
 				tagsPnl.repaint();
+				tags.remove(tag);
 				break;
 			}
 		}
@@ -252,7 +268,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 	
 	private void checkItems(ActionEvent event) {
 		for (JButton item: items) {
-			if ( event.getSource() == item) {
+			if (event.getSource() == item) {
 				EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					try {
