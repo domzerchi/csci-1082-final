@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import finalproject.Collection.ItemEnteredTwiceException;
+import projectfinal.Collection.ItemEnteredTwiceException;
 
 public class GuiSearch extends JFrame implements ActionListener {
 
@@ -37,7 +37,6 @@ public class GuiSearch extends JFrame implements ActionListener {
 	
 	private JCheckBox nameChkbx;
 	private JCheckBox tagChkbx;
-	private JCheckBox toggleImgChkbx;
 	
 	private JButton ClxnBtn;
 	private JTextField addItemFld;
@@ -57,6 +56,9 @@ public class GuiSearch extends JFrame implements ActionListener {
 	private boolean imgX = false;
 	private JButton newItemBtn;
 	private JPanel displayPnl;
+	private JTextField deleteItemFld;
+	private JPanel deleteItemPnl;
+	private JLabel deleteItemLbl;
 	
 	/**
 	 * Create the application.
@@ -118,11 +120,22 @@ public class GuiSearch extends JFrame implements ActionListener {
 		tagChkbx.setBackground(Color.WHITE);
 		toggleSearchPnl.add(tagChkbx);
 		
-		toggleImgChkbx = new JCheckBox("Show Images");
-		toggleImgChkbx.setBackground(Color.WHITE);
-		settingsPnl.add(toggleImgChkbx);
+		deleteItemPnl = new JPanel();
+		deleteItemPnl.setBackground(Color.WHITE);
+		FlowLayout flowLayout_1 = (FlowLayout) deleteItemPnl.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.RIGHT);
+		settingsPnl.add(deleteItemPnl);
+		
+		deleteItemLbl = new JLabel("Delete Item");
+		deleteItemPnl.add(deleteItemLbl);
+		
+		deleteItemFld = new JTextField();
+		deleteItemPnl.add(deleteItemFld);
+		deleteItemFld.setColumns(10);
 		
 		itemPnl = new JPanel();
+		FlowLayout flowLayout_2 = (FlowLayout) itemPnl.getLayout();
+		flowLayout_2.setAlignment(FlowLayout.RIGHT);
 		itemPnl.setBackground(Color.WHITE);
 		settingsPnl.add(itemPnl);
 		
@@ -135,6 +148,8 @@ public class GuiSearch extends JFrame implements ActionListener {
 		addItemFld.setColumns(10);
 		
 		tagPnl = new JPanel();
+		FlowLayout flowLayout_3 = (FlowLayout) tagPnl.getLayout();
+		flowLayout_3.setAlignment(FlowLayout.RIGHT);
 		tagPnl.setBackground(Color.WHITE);
 		settingsPnl.add(tagPnl);
 		
@@ -175,7 +190,6 @@ public class GuiSearch extends JFrame implements ActionListener {
 		searchFld.addActionListener(this);
 		nameChkbx.addActionListener(this);
 		tagChkbx.addActionListener(this);
-		toggleImgChkbx.addActionListener(this);
 		addItemFld.addActionListener(this);
 		addTagFld.addActionListener(this);
 		ClxnBtn.addActionListener(this);
@@ -189,7 +203,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 			checkBox(nameX);
 		} else if (event.getSource() == tagChkbx) {
 			checkBox(tagX);
-		} else if (event.getSource() == toggleImgChkbx) {
+		} else if (event.getSource() == deleteItemFld) {
 			checkBox(imgX);
 		} else if (event.getSource() == addItemFld) {
 			addItem(event);
@@ -215,24 +229,20 @@ public class GuiSearch extends JFrame implements ActionListener {
 	}
 	
 	private void addItem(ActionEvent event) { // check that item doesn't already exist when creating a button
-		for (int i = 0; i < items.size(); i++) {
-			if (addItemFld.getText() == items.get(i).getText()) {
-				addItemFld.setText("Item already exists!");
-				break;
-			}
+		Item newItem = new Item(addItemFld.getText());
+		try {
+			data.addItem(newItem);
+		} catch (ItemEnteredTwiceException e) {
+			addItemFld.setText("Item already exists!");
+			e.printStackTrace();
 		}
+		
 		newItemBtn = new JButton(addItemFld.getText());
 		newItemBtn.setPreferredSize(new Dimension(100, 100));
 		displayPnl.add(newItemBtn);
 		displayPnl.revalidate();
 		newItemBtn.addActionListener(this);
 
-		Item newItem = new Item(addItemFld.getText());
-		try {
-			data.addItem(newItem);
-		} catch (ItemEnteredTwiceException e) {
-			e.printStackTrace();
-		}
 		items.add(newItemBtn);
 		addItemFld.setText("");
 	}
