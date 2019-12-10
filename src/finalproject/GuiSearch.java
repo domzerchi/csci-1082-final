@@ -228,31 +228,24 @@ public class GuiSearch extends JFrame implements ActionListener {
 			x = false;
 	}
 	
-	private void addItem(ActionEvent event) { // check that item doesn't already exist when creating a button
+	private void addItem(ActionEvent event) {
 		Item newItem = new Item(addItemFld.getText());
 		try {
-			data.addItem(newItem);
-			newItemBtn = new JButton(addItemFld.getText());
-			newItemBtn.setPreferredSize(new Dimension(100, 100));
-			displayPnl.add(newItemBtn);
-			displayPnl.revalidate();
-			newItemBtn.addActionListener(this);
+			if (!addItemFld.getText().trim().isEmpty()) {
+				data.addItem(newItem);
+				newItemBtn = new JButton(addItemFld.getText());
+				newItemBtn.setPreferredSize(new Dimension(100, 100));
+				displayPnl.add(newItemBtn);
+				displayPnl.revalidate();
+				newItemBtn.addActionListener(this);
 
-			items.add(newItemBtn);
-			addItemFld.setText("");
+				items.add(newItemBtn);
+				addItemFld.setText("");	
+			}
 		} catch (ItemEnteredTwiceException e) {
-			addItemFld.setText("Item already exists!");
+			addItemFld.setText("");
 			e.printStackTrace();
 		}
-		
-//		newItemBtn = new JButton(addItemFld.getText());
-//		newItemBtn.setPreferredSize(new Dimension(100, 100));
-//		displayPnl.add(newItemBtn);
-//		displayPnl.revalidate();
-//		newItemBtn.addActionListener(this);
-//
-//		items.add(newItemBtn);
-//		addItemFld.setText("");
 	}
 	
 	private void addTag() {
