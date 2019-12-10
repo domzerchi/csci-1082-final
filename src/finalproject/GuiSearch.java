@@ -217,7 +217,40 @@ public class GuiSearch extends JFrame implements ActionListener {
 		}
 	}
 
-	private void search() {
+	private void search() { // disaster zone
+		displayPnl.removeAll();
+		if (addItemFld.getText().trim().isEmpty()) {
+			for (int i = 0; i < data.getContents().size(); i++) {
+				newItemBtn = new JButton(data.getContents().get(i).getName());
+				newItemBtn.setPreferredSize(new Dimension(100, 100));
+				displayPnl.add(newItemBtn);
+				newItemBtn.addActionListener(this);
+			}
+		}
+		ArrayList<Item> searchResults = new ArrayList<>();
+		Item searchInput = new Item(searchFld.getText());
+		if (nameX) {
+			if (data.getContents().contains(searchInput)) {
+				int index = data.getContents().indexOf(searchInput);
+				searchResults.add(data.getContents().get(index));
+			}
+		}
+		if (tagX) {
+			for (int i = 0; i < data.getContents().size(); i++) {
+				if (data.getContents().contains(searchInput)) {
+					int index = data.getContents().indexOf(searchInput);
+					searchResults.add(data.getContents().get(index));					
+				}
+			}
+		}
+		for (int i = 0; i < searchResults.size(); i++) {
+			newItemBtn = new JButton(searchResults.get(i).getName());
+			newItemBtn.setPreferredSize(new Dimension(100, 100));
+			displayPnl.add(newItemBtn);
+			newItemBtn.addActionListener(this);
+		}
+		displayPnl.revalidate();
+		displayPnl.repaint();
 		searchFld.setText("");
 	}
 
