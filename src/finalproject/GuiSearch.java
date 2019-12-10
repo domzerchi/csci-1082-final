@@ -1,27 +1,25 @@
 package finalproject;
 
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JCheckBox;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
 
-import projectfinal.Collection.ItemEnteredTwiceException;
+import finalproject.Collection.ItemEnteredTwiceException;
 
 public class GuiSearch extends JFrame implements ActionListener {
 
