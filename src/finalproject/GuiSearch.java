@@ -229,12 +229,6 @@ public class GuiSearch extends JFrame implements ActionListener {
 	}
 	
 	private void addItem(ActionEvent event) { // check that item doesn't already exist when creating a button
-//		for (int i = 0; i < items.size(); i++) {
-//			if (addItemFld.getText() == items.get(i).getText()) {
-//				addItemFld.setText("Item already exists!");
-//				break;
-//			}
-//		}
 		Item newItem = new Item(addItemFld.getText());
 		try {
 			data.addItem(newItem);
@@ -242,8 +236,6 @@ public class GuiSearch extends JFrame implements ActionListener {
 			addItemFld.setText("Item already exists!");
 			e.printStackTrace();
 		}
-		items.add(newItemBtn);
-		addItemFld.setText("");
 		
 		newItemBtn = new JButton(addItemFld.getText());
 		newItemBtn.setPreferredSize(new Dimension(100, 100));
@@ -251,7 +243,8 @@ public class GuiSearch extends JFrame implements ActionListener {
 		displayPnl.revalidate();
 		newItemBtn.addActionListener(this);
 
-
+		items.add(newItemBtn);
+		addItemFld.setText("");
 	}
 	
 	private void addTag() {
