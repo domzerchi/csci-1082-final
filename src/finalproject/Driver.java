@@ -31,10 +31,10 @@ public class Driver {
 			Item gso = new Item("Poecilotheria Metallica");
 			gso.setNote("This Old World tarantula is the only known blue species of the Poecilotheria genus.");
 			
-//			gso.setType("Tarantula");
-//			BufferedImage blueTarantulaImg;
-//			blueTarantulaImg = ImageIO.read(new File("GootySapphireOrn.jpg"));
-//			gso.setImg(blueTarantulaImg);
+			gso.setType("Tarantula");
+			BufferedImage blueTarantulaImg;
+			blueTarantulaImg = ImageIO.read(new File("GootySapphireOrn.jpg"));
+			gso.setImg(blueTarantulaImg);
 			
 			gso.addTag(new Tag("Old World"));
 			gso.addTag(new Tag("Arachnid"));

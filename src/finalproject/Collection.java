@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import finalproject.Item.TagEnteredTwiceException;
 
@@ -71,6 +72,7 @@ public class Collection implements Serializable {
 			throw new ItemEnteredTwiceException();
 		}else {
 			getContents().add(newItem);
+			isKnownToBeSorted = false;
 		}
 	}
 	
@@ -112,7 +114,11 @@ public class Collection implements Serializable {
 
 	@Override
 	public String toString() {
-		String info = "Collection " + name + "[contents=\n\n";
+		if(!isKnownToBeSorted) {
+			Collections.sort(contents, Item.CompareByValue);
+			isKnownToBeSorted = true;
+		}
+		String info = "Collection " + name + "[contents=\n";
 		for(int i = 0; i < getContents().size(); i++) {
 			
 			info += "\n\n" + getContents().get(i).toString();
@@ -122,17 +128,35 @@ public class Collection implements Serializable {
 	}
 	
 	/**
-	 * @return the contents
+	 * @return the items that make up the database
 	 */
 	public ArrayList<Item> getContents() {
+		if(!isKnownToBeSorted) {
+			Collections.sort(contents, Item.CompareByValue);
+			isKnownToBeSorted = true;
+		}
 		return contents;
 	}
 
 	/**
-	 * @param contents the contents to set
+	 * @param contents the items to be set as the contents of the database
 	 */
 	public void setContents(ArrayList<Item> contents) {
 		this.contents = contents;
+		if(!isKnownToBeSorted) {
+			Collections.sort(contents, Item.CompareByValue);
+			isKnownToBeSorted = true;
+		}
+	}
+	
+	public ArrayList<Item> search(ArrayList<Item> itemsToFind) {
+		ArrayList<Item> found = null;
+		for(Item element : itemsToFind) {
+			if(contents.contains(element)) {
+				found.add(element);
+			}
+		}
+		return found;
 	}
 
 	public class ItemEnteredTwiceException extends Exception {

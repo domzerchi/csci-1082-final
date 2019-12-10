@@ -3,13 +3,16 @@
  */
 package finalproject;
 
-import java.awt.EventQueue;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 import finalproject.Collection.ItemEnteredTwiceException;
 import finalproject.Item.TagEnteredTwiceException;
@@ -19,6 +22,11 @@ import finalproject.Item.TagEnteredTwiceException;
  *
  */
 public class Driver2 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static void main(String[] args) throws TagEnteredTwiceException, ItemEnteredTwiceException, IOException, ClassNotFoundException {
 		
 			Item gso = new Item("Poecilotheria Metallica");
@@ -26,7 +34,8 @@ public class Driver2 {
 			
 			gso.setType("Tarantula");
 			BufferedImage blueTarantulaImg;
-			blueTarantulaImg = ImageIO.read(new File("/Users/stephenpolson/git/csci-1082-final/GootySapphireOrn.jpg"));
+			String fileName = "GootySapphireOrn.jpg";
+			blueTarantulaImg = ImageIO.read(new File(fileName));
 			gso.setImg(blueTarantulaImg);
 			
 			gso.addTag(new Tag("Old World"));

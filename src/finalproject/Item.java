@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class Item implements Serializable {
 
@@ -17,6 +18,20 @@ public class Item implements Serializable {
 	private ArrayList<Tag> tags;
 	private transient BufferedImage img;
 	
+	/**
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(String value) {
+		this.value = value;
+	}
+
 	/**
 	 * We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.
 	 */
@@ -90,6 +105,7 @@ public class Item implements Serializable {
 			throw new TagEnteredTwiceException();
 		}else {
 			tags.add(newTag);
+			isKnownToBeSorted=false;
 		}
 	}
 	
@@ -118,11 +134,16 @@ public class Item implements Serializable {
 			
 		}
 		
-		
-		
-	//TODO image array
 		return info;
 	}
+	
+public static Comparator<Item> CompareByValue = new Comparator<Item>() {
+		
+		@Override
+		public int compare(Item o1, Item o2) {
+			return o1.getValue().compareTo(o2.getValue());
+		}
+	};
 	
 @Override
 	public int hashCode() {
