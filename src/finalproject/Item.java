@@ -55,6 +55,11 @@ public class Item implements Serializable {
 		tags = new ArrayList<Tag>(initialSize);
 	}
 	
+	public Item(String name, ArrayList<Tag> tags) {
+		this.value = name;
+		this.tags = new ArrayList<Tag>(tags);
+	}
+	
 	public String getName() {
 		return value;
 	}
@@ -111,6 +116,16 @@ public class Item implements Serializable {
 	
 	public boolean deleteTag(Tag tag) {
 		return tags.remove(tag);
+	}
+	
+	public ArrayList<Tag> find(ArrayList<Tag> tagsToFind) {
+		ArrayList<Tag> found = new ArrayList<Tag>();
+		for(Tag element : tagsToFind) {
+			if(tags.contains(element)) {
+				found.add(element);
+			}
+		}
+		return found;
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import finalproject.Collection.ItemEnteredTwiceException;
 import finalproject.Item.TagEnteredTwiceException;
 
 /**
@@ -149,15 +150,52 @@ public class Collection implements Serializable {
 		}
 	}
 	
-	public ArrayList<Item> search(ArrayList<Item> itemsToFind) {
-		ArrayList<Item> found = null;
+	public Collection find(ArrayList<Item> itemsToFind) {
+		Collection found = new Collection();
 		for(Item element : itemsToFind) {
 			if(contents.contains(element)) {
-				found.add(element);
+				try {
+					found.addItem(element);
+				} catch (ItemEnteredTwiceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return found;
 	}
+
+	public Collection containsTags(ArrayList<Tag> tagsToFind) {
+		Collection found = new Collection();
+		for(Item eachItem : contents) {
+			for(Tag eachTag : tagsToFind) {
+				if(eachItem.getTags().contains(eachTag)) {
+					try {
+						found.addItem(new Item(eachItem.getValue(), eachItem.find(tagsToFind)));
+						break;
+					} catch (ItemEnteredTwiceException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return found;
+	}
+	
+	public ArrayList<Tag> findTag(ArrayList<Tag> tagsToFind){
+		ArrayList<Tag> found = new ArrayList<Tag>();
+		for(Tag eachTag : tagsToFind) {
+			for(Item eachItem : contents) {
+				if(eachItem.getTags().contains(eachTag)) {
+					found.add(eachTag);
+					break;
+				}
+			}
+		}
+		return found;
+	}
+	
 
 	public class ItemEnteredTwiceException extends Exception {
 
