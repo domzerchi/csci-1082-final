@@ -15,7 +15,7 @@ public class Item implements Serializable {
 	private String note;
 	private String type;
 	private ArrayList<Tag> tags;
-	private BufferedImage img;
+	private transient BufferedImage img;
 	
 	/**
 	 * We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.

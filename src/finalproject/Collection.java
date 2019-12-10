@@ -1,5 +1,11 @@
 package finalproject;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -72,6 +78,23 @@ public class Collection implements Serializable {
 		return getContents().remove(itemToRemove);
 	}
 	
+	public void saveCollection() throws IOException {
+		String fileName=name+".ser";
+		FileOutputStream fout = new FileOutputStream(fileName);
+		ObjectOutputStream oos = new ObjectOutputStream(fout);
+		oos.writeObject(this);
+		oos.close();
+	}
+	
+	public Collection readCollection(String databaseToRead) throws FileNotFoundException, IOException, ClassNotFoundException {
+		String fileName=databaseToRead+".ser";
+		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+		Collection database;
+		database = (Collection)ois.readObject();
+		ois.close();
+		return database;
+		
+	}
 
 	/**
 	 * @return the name
@@ -89,7 +112,7 @@ public class Collection implements Serializable {
 
 	@Override
 	public String toString() {
-		String info = "Collection [contents=\n\n";
+		String info = "Collection " + name + "[contents=\n\n";
 		for(int i = 0; i < getContents().size(); i++) {
 			
 			info += "\n\n" + getContents().get(i).toString();

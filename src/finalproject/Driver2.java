@@ -19,15 +19,15 @@ import finalproject.Item.TagEnteredTwiceException;
  *
  */
 public class Driver2 {
-	public static void main(String[] args) throws TagEnteredTwiceException, ItemEnteredTwiceException, IOException {
+	public static void main(String[] args) throws TagEnteredTwiceException, ItemEnteredTwiceException, IOException, ClassNotFoundException {
 		
 			Item gso = new Item("Poecilotheria Metallica");
 			gso.setNote("This Old World tarantula is the only known blue species of the Poecilotheria genus.");
 			
-//			gso.setType("Tarantula");
-//			BufferedImage blueTarantulaImg;
-//			blueTarantulaImg = ImageIO.read(new File("/Users/stephenpolson/git/csci-1082-final/GootySapphireOrn.jpg"));
-//			gso.setImg(blueTarantulaImg);
+			gso.setType("Tarantula");
+			BufferedImage blueTarantulaImg;
+			blueTarantulaImg = ImageIO.read(new File("/Users/stephenpolson/git/csci-1082-final/GootySapphireOrn.jpg"));
+			gso.setImg(blueTarantulaImg);
 			
 			gso.addTag(new Tag("Old World"));
 			gso.addTag(new Tag("Arachnid"));
@@ -54,13 +54,13 @@ public class Driver2 {
 			System.out.println(bugs.toString());
 			System.out.println("\n");
 			
-//			String databaseName = bugs.getName();
-//			try {
-//				FileOutputStream fileOut = new FileOutputStream(new File(databaseName));
-//				fileOut.writeObject(bugs);
-//				fileOut.close();
-//			}
+			bugs.saveCollection();
+
+			Collection collectionFromFile = bugs.readCollection("bugs");
 			
+			collectionFromFile.setName("bugsSavedThenRetrieved");
+			
+			System.out.println(collectionFromFile);
 			}
 
 }
