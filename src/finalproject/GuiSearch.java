@@ -232,19 +232,27 @@ public class GuiSearch extends JFrame implements ActionListener {
 		Item newItem = new Item(addItemFld.getText());
 		try {
 			data.addItem(newItem);
+			newItemBtn = new JButton(addItemFld.getText());
+			newItemBtn.setPreferredSize(new Dimension(100, 100));
+			displayPnl.add(newItemBtn);
+			displayPnl.revalidate();
+			newItemBtn.addActionListener(this);
+
+			items.add(newItemBtn);
+			addItemFld.setText("");
 		} catch (ItemEnteredTwiceException e) {
 			addItemFld.setText("Item already exists!");
 			e.printStackTrace();
 		}
 		
-		newItemBtn = new JButton(addItemFld.getText());
-		newItemBtn.setPreferredSize(new Dimension(100, 100));
-		displayPnl.add(newItemBtn);
-		displayPnl.revalidate();
-		newItemBtn.addActionListener(this);
-
-		items.add(newItemBtn);
-		addItemFld.setText("");
+//		newItemBtn = new JButton(addItemFld.getText());
+//		newItemBtn.setPreferredSize(new Dimension(100, 100));
+//		displayPnl.add(newItemBtn);
+//		displayPnl.revalidate();
+//		newItemBtn.addActionListener(this);
+//
+//		items.add(newItemBtn);
+//		addItemFld.setText("");
 	}
 	
 	private void addTag() {
@@ -260,6 +268,9 @@ public class GuiSearch extends JFrame implements ActionListener {
 	
 	private void fileChooser() { 
 		// don't know how to do thingsssss
+		
+		
+		
 	}
 	
 	private void checkTags(ActionEvent event) {
@@ -290,4 +301,8 @@ public class GuiSearch extends JFrame implements ActionListener {
 		}
 	}
 	
+	
+	
 }
+
+

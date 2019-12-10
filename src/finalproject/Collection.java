@@ -83,7 +83,7 @@ public class Collection implements Serializable {
 	}
 	
 	public void saveCollection() throws IOException {
-		String fileName="DatabaseFiles" + File.separator + name+".ser";
+		String fileName="DatabaseFiles" + File.separator + name;
 		FileOutputStream fout = new FileOutputStream(fileName);
 		ObjectOutputStream oos = new ObjectOutputStream(fout);
 		oos.writeObject(this);
@@ -91,7 +91,7 @@ public class Collection implements Serializable {
 	}
 	
 	public Collection readCollection(String databaseToRead) throws FileNotFoundException, IOException, ClassNotFoundException {
-		String fileName="DatabaseFiles" + File.separator + databaseToRead+".ser";
+		String fileName="DatabaseFiles" + File.separator + databaseToRead;
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
 		Collection database;
 		database = (Collection)ois.readObject();
@@ -151,6 +151,7 @@ public class Collection implements Serializable {
 		}
 	}
 	
+	//search for 1 item
 	public Collection find(ArrayList<Item> itemsToFind) {
 		Collection found = new Collection();
 		for(Item element : itemsToFind) {
@@ -166,6 +167,7 @@ public class Collection implements Serializable {
 		return found;
 	}
 
+	//return a list of tags
 	public Collection containsTags(ArrayList<Tag> tagsToFind) {
 		Collection found = new Collection();
 		for(Item eachItem : contents) {

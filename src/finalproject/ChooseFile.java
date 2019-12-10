@@ -21,6 +21,7 @@ static private final String newline = "\n";
 JButton openButton, saveButton;
 JTextArea log;
 JFileChooser fchoose;
+Collection data = new Collection();
 
 /**
  * 
@@ -41,7 +42,7 @@ fchoose.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 openButton = new JButton("Choose a Database File...");
 openButton.addActionListener(this);
 
-saveButton = new JButton("Choose Directory to Save to...");
+saveButton = new JButton("Choose File to Save to...");
 saveButton.addActionListener(this);
 
 JPanel buttonPanel = new JPanel(); //use FlowLayout
@@ -55,22 +56,83 @@ add(logScrollPane, BorderLayout.CENTER);
 public void actionPerformed(ActionEvent e) {
 
 if (e.getSource() == openButton) {
+	fchoose.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 	int returnVal = fchoose.showOpenDialog(ChooseFile.this);
 	
 	if (returnVal == JFileChooser.APPROVE_OPTION) {
 		File file = fchoose.getSelectedFile();
-		//This is where a real application would open the file.
+		
+		System.out.println(file.toString());
+		
+		ObjectInputStream ois = null;
+		try {
+			ois = new ObjectInputStream(new FileInputStream(file.toString()));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			data  = (Collection)ois.readObject();
+		} catch (ClassNotFoundException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			ois.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println(data.toString());
+		
 		log.append("Opening: " + file.getName() + "." + newline);
 } else {
 		log.append("Open command cancelled by user." + newline);
 }
 	log.setCaretPosition(log.getDocument().getLength());
 
+	
+	
 }else if (e.getSource() == saveButton) {
+	fchoose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     int returnVal = fchoose.showSaveDialog(ChooseFile.this);
     if (returnVal == JFileChooser.APPROVE_OPTION) {
         File file = fchoose.getSelectedFile();
-        //This is where a real application would save the file.
+        
+        System.out.println(file.toString());
+        
+        String fileName=file.toString() + file.separator + data.getName();
+        
+        System.out.println(fileName);
+        
+		FileOutputStream fout = null;
+		try {
+			fout = new FileOutputStream(fileName);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		ObjectOutputStream oos = null;
+		try {
+			oos = new ObjectOutputStream(fout);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			oos.writeObject(this);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			oos.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
         log.append("Saving: " + file.getName() + "." + newline);
     } else {
         log.append("Save command cancelled by user." + newline);
