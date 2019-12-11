@@ -28,48 +28,51 @@ public class GuiSearch extends JFrame implements ActionListener {
 	private JPanel toggleSearchPnl;
 	private JPanel settingsPnl;
 	private JPanel filePnl;
+	private JPanel searchPnl;
+	private JPanel itemPnl;
+	private JPanel tagPnl;
+	private JPanel tagsPnl;
+	private JPanel displayPnl;
+	private JPanel deleteItemPnl;
 	
 	private JLabel titleLbl;
 	private JLabel searchByLbl;
+	private JLabel searchLbl;
+	private JLabel itemLbl;
+	private JLabel tagLbl;
+	private JLabel deleteItemLbl;
 	
 	private JTextField searchFld;
 	private JTextField addTagFld;
+	private JTextField addItemFld;
+	private JTextField deleteItemFld;
 	
 	private JCheckBox nameChkbx;
 	private JCheckBox tagChkbx;
 	
 	private JButton ClxnBtn;
-	private JTextField addItemFld;
-	private JPanel searchPnl;
-	private JLabel searchLbl;
-	private JPanel itemPnl;
-	private JLabel itemLbl;
-	private JPanel tagPnl;
-	private JPanel tagsPnl;
-	private JLabel tagLbl;
-	Collection data = new Collection("New Database"); // needs to be alphabetized
+	private JButton newItemBtn;
+
+	Collection data = new Collection("New Database"); // needs to be alphabetized?
 	ArrayList<JButton> items = new ArrayList<>();
 	ArrayList<JButton> tags = new ArrayList<>();
 	
 	private boolean nameX = true;
 	private boolean tagX = false;
-	private boolean imgX = false;
-	private JButton newItemBtn;
-	private JPanel displayPnl;
-	private JTextField deleteItemFld;
-	private JPanel deleteItemPnl;
-	private JLabel deleteItemLbl;
 	
 	/**
 	 * Create the application.
 	 */
 	public GuiSearch() {
 		initialize();
+		// initialize the displaypanel
 		for (int i = 0; i < this.data.getContents().size(); i++) {
 			newItemBtn = new JButton(data.getContents().get(i).getName());
 			newItemBtn.setPreferredSize(new Dimension(100, 100));
 			displayPnl.add(newItemBtn);
 			newItemBtn.addActionListener(this);
+			displayPnl.revalidate();
+			displayPnl.repaint();
 		}
 	}
 	
@@ -192,6 +195,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 		setActionListener();
 	}
 	
+	// sets action listeners
 	private void setActionListener() {
 		searchFld.addActionListener(this);
 		nameChkbx.addActionListener(this);
@@ -223,9 +227,12 @@ public class GuiSearch extends JFrame implements ActionListener {
 		}
 	}
 
-							// disaster zone
+	/**
+	 * searches by name and/or tag then displays a new array in the display panel 
+	 */
 	private void search() { // searching by name AND tag doesn't work correctly
 		displayPnl.removeAll();
+		// if the search field is empty, all items in data will be displayed
 		if (addItemFld.getText().trim().isEmpty()) {
 			for (int i = 0; i < data.getContents().size(); i++) {
 				newItemBtn = new JButton(data.getContents().get(i).getName());
@@ -236,12 +243,14 @@ public class GuiSearch extends JFrame implements ActionListener {
 		}
 		ArrayList<Item> searchResults = new ArrayList<>();
 		Item searchInput = new Item(searchFld.getText());
+		// searches through names of items in data, then adds them to searchResults
 		if (nameX) {
 			if (data.getContents().contains(searchInput)) {
 				int index = data.getContents().indexOf(searchInput);
 				searchResults.add(data.getContents().get(index));
 			}
 		}
+		// searches through names of items in data, then adds them to searchResults		
 		if (tagX) {
 			for (int i = 0; i < data.getContents().size(); i++) {
 				if (data.getContents().contains(searchInput)) {
@@ -250,6 +259,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 				}
 			}
 		}
+		// displays all items in searchResults
 		for (int i = 0; i < searchResults.size(); i++) {
 			newItemBtn = new JButton(searchResults.get(i).getName());
 			newItemBtn.setPreferredSize(new Dimension(100, 100));
@@ -261,6 +271,10 @@ public class GuiSearch extends JFrame implements ActionListener {
 		searchFld.setText("");
 	}
 
+	/**
+	 * switches booleans from true to false, and vice versa.
+	 * @param x the boolean that will be switched.
+	 */
 	private void checkBox(boolean x) {
 		if (x == false)
 			x = true;
@@ -283,9 +297,14 @@ public class GuiSearch extends JFrame implements ActionListener {
 		deleteItemFld.setText("");
 	}
 	
+	/**
+	 * creates a new item and displays it on the display panel.
+	 * @throws ItemEnteredTwiceException
+	 */
 	private void addItem() {
 		Item newItem = new Item(addItemFld.getText());
 		try {
+			// items only get created if they have a name
 			if (!addItemFld.getText().trim().isEmpty()) {
 				data.addItem(newItem);
 				newItemBtn = new JButton(addItemFld.getText());
@@ -303,6 +322,8 @@ public class GuiSearch extends JFrame implements ActionListener {
 		}
 	}
 	
+	
+	// adds a tag to the tags panel.
 	private void addTag() {
 		if (!addTagFld.getText().equals("")) {
 		JButton newTagBtn = new JButton(addTagFld.getText());
@@ -321,6 +342,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 		frame.dispose();
 	}
 	
+	// when a tag is clicked, it gets removed.
 	private void checkTags(ActionEvent event) {
 		for (JButton tag: tags) {
 			if (event.getSource() == tag) {
@@ -333,6 +355,10 @@ public class GuiSearch extends JFrame implements ActionListener {
 		}
 	}
 	
+	/**
+	 * when a button for an item is clicked, the GuiSearch frame closes and a GuiItem frame opens.
+	 * @param event is checked for a parallel item, then that item gets passed to the GuiItem class when it opens
+	 */
 	private void checkItems(ActionEvent event) {
 		for (JButton item: items) {
 			if (event.getSource() == item) {
@@ -353,5 +379,3 @@ public class GuiSearch extends JFrame implements ActionListener {
 	}
 	
 }
-
-
