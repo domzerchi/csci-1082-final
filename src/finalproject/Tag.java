@@ -1,29 +1,22 @@
 package finalproject;
 
-import java.io.Serializable;
 import java.util.Comparator;
 
-public class Tag implements Serializable {
-	
+public class Tag {
+
 	private String value;
 
-	/**
-	 * 
-	 */
-	public Tag() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
+	// constructor for a tag
 	public Tag(String value) {
 		super();
 		this.value = value;
 	}
 
+	// accessor for value
 	public String getValue() {
 		return value;
 	}
-	
+	// mutator for value
 	public void setValue(String value) {
 		this.value = value;
 	}
@@ -36,6 +29,7 @@ public class Tag implements Serializable {
 		return result;
 	}
 
+	// tests whether or not two values are the same
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -50,14 +44,15 @@ public class Tag implements Serializable {
 			return false;
 		return true;
 	}
-	
-@Override
+
+	// returns value with a hash in front of it
+	@Override
 	public String toString() {
 		return " #" + value;
 	}
 
-public static Comparator<Tag> CompareByValue = new Comparator<Tag>() {
-		
+	public static Comparator<Tag> CompareByValue = new Comparator<Tag>() {
+
 		@Override
 		public int compare(Tag o1, Tag o2) {
 			return o1.getValue().compareTo(o2.getValue());
