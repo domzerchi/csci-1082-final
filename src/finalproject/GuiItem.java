@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,10 +23,8 @@ import javax.swing.border.LineBorder;
 public class GuiItem extends JFrame implements ActionListener {
 
 	private JFrame frame;
-	private JPanel imgPnl;
 	private JPanel editPnl;
 	private JPanel helperPnl;
-	private JLabel nameLbl;
 	private JTextField typeFld;
 	private JTextField tagFld;
 	private JLabel typeLbl;
@@ -38,22 +37,10 @@ public class GuiItem extends JFrame implements ActionListener {
 	private JTextArea notesArea;
 	private JScrollPane scroll;
 	private JPanel notesPnl;
-
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					GuiItem window = new GuiItem();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	private JTextField nameFld;
+	
+	Item item = new Item();
+	ArrayList<JButton> tags = new ArrayList<>();
 
 	/**
 	 * Create the application.
@@ -61,12 +48,25 @@ public class GuiItem extends JFrame implements ActionListener {
 	public GuiItem() {
 		initialize();
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	public GuiItem() {
+	
+	public GuiItem(Item input) {
+		item = input;
 		initialize();
+		// set name
+		nameFld.setText(item.getName());
+		// set type
+		typeFld.setText(item.getType());
+		// set tags
+		ArrayList<Tag> itemTags = item.getTags();
+		for (int i = 0; i < itemTags.size(); i++) {
+			JButton newTagBtn = new JButton(itemTags.get(i).getValue());
+			tagsPnl.add(newTagBtn);
+			newTagBtn.addActionListener(this);
+			tags.add(newTagBtn);
+		}
+		tagsPnl.revalidate();
+		// set notes
+		notesArea.setText(item.getNote());
 	}
 
 	/**
@@ -90,10 +90,11 @@ public class GuiItem extends JFrame implements ActionListener {
 		editPnl.add(helperPnl, BorderLayout.NORTH);
 		helperPnl.setLayout(new GridLayout(3, 0, 0, 0));
 		
-		nameLbl = new JLabel("*database title*");
-		nameLbl.setBackground(Color.WHITE);
-		nameLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		helperPnl.add(nameLbl);
+		nameFld = new JTextField();
+		nameFld.setHorizontalAlignment(SwingConstants.CENTER);
+		nameFld.setText("Name");
+		helperPnl.add(nameFld);
+		nameFld.setColumns(10);
 		
 		typePnl = new JPanel();
 		typePnl.setBackground(Color.WHITE);
@@ -134,6 +135,7 @@ public class GuiItem extends JFrame implements ActionListener {
 		savePnl.add(saveBtn);
 		
 		notesPnl = new JPanel();
+		notesPnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		frame.getContentPane().add(notesPnl, BorderLayout.CENTER);
 		notesPnl.setLayout(new BorderLayout(0, 0));
 		
@@ -148,42 +150,75 @@ public class GuiItem extends JFrame implements ActionListener {
 		notesPnl.add(scroll);
 
 		frame.setBounds(0, 0, 600, 600);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setVisible(true);
 		setActionListener();
 	}
 
 	private void setActionListener() {
+		nameFld.addActionListener(this);
 		typeFld.addActionListener(this);
 		tagFld.addActionListener(this);
 		saveBtn.addActionListener(this);
+
+		frame.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				item.setNote(notesArea.getText());
+		    	frame.dispose();
+				GuiSearch window = new GuiSearch();
+		    }
+		});
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// add name editor
-		if (e.getSource() == typeFld) {
-			addType();
+		if (e.getSource() == nameFld) {
+			setName();
+		} else if (e.getSource() == typeFld) {
+			setType();
 		} else if (e.getSource() == tagFld) {
 			addTag();
 		} else if (e.getSource() == saveBtn) {
 			saveNotes();
+		} else {
+			checkTags(e);
 		}
 	}
 
-	private void addType() {
-		// TODO Auto-generated method stub
-		
+	private void setName() {
+		item.setName(nameFld.getText());
+	}
+
+	private void setType() {
+		item.setType(typeFld.getText());
 	}
 	
 	private void addTag() {
-		// TODO Auto-generated method stub
-		
+		if (!tagFld.getText().equals("")) {
+		JButton newTagBtn = new JButton(tagFld.getText());
+		tagsPnl.add(newTagBtn);
+		tagsPnl.revalidate();
+		newTagBtn.addActionListener(this);
+		tags.add(newTagBtn);
+		tagFld.setText("");
+		}
 	}
 	
 	private void saveNotes() {
-		// TODO Auto-generated method stub
-		
+		item.setNote(notesArea.getText());
+	}
+	
+	private void checkTags(ActionEvent e) {
+		for (JButton tag: tags) {
+			if (e.getSource() == tag) {
+				tagsPnl.remove(tag);
+				tagsPnl.revalidate();
+				tagsPnl.repaint();
+				tags.remove(tag);
+				break;
+			}
+		}
 	}
 	
 }
