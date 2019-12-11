@@ -1,5 +1,6 @@
 package finalproject;
 
+//All classes within Collection need to be serializable in order for reading/writing of databases to work
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;

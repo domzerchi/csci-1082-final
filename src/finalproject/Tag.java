@@ -1,8 +1,16 @@
 package finalproject;
 
 import java.util.Comparator;
+//All classes within Collection need to be serializable in order for reading/writing of databases to work
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 
-public class Tag {
+/**
+ * @author gg2938qa
+ *
+ */
+public class Tag implements Serializable {
 
 	private String value;
 

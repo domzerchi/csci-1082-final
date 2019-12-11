@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+//Collection and all classes within it need to be serializable in order for reading/writing of databases to work
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -34,7 +34,7 @@ public class Driver {
 			gso.setType("Tarantula");
 			BufferedImage blueTarantulaImg;
 			blueTarantulaImg = ImageIO.read(new File("GootySapphireOrn.jpg"));
-			gso.setImg(blueTarantulaImg);
+			
 			
 			gso.addTag(new Tag("Old World"));
 			gso.addTag(new Tag("Arachnid"));
