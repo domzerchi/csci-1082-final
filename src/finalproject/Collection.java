@@ -133,9 +133,21 @@ public class Collection implements Serializable {
 		oos.writeObject(this);
 		oos.close();
 	}
+	
+	/**
+	 * @param relabiveFilePath currently means relative to user working directory
+	 * @throws IOException
+	 */
+	public void saveCollection(String relabiveFilePath) throws IOException {
+		String fileName="DatabaseFiles" + File.separator + name;
+		FileOutputStream fout = new FileOutputStream(fileName);
+		ObjectOutputStream oos = new ObjectOutputStream(fout);
+		oos.writeObject(this);
+		oos.close();
+	}
 
 	public Collection readCollection(String databaseToRead) throws FileNotFoundException, IOException, ClassNotFoundException {
-		String fileName="DatabaseFiles" + File.separator + databaseToRead;
+		String fileName=databaseToRead;
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
 		Collection database;
 		database = (Collection)ois.readObject();

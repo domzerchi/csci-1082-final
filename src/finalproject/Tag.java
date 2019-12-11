@@ -3,15 +3,18 @@ package finalproject;
 import java.util.Comparator;
 //All classes within Collection need to be serializable in order for reading/writing of databases to work
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
- * @author gg2938qa
+ * @author stephenpolson, aydensinn
  *
  */
+//All classes within Collection need to be serializable in order for reading/writing of databases to work
 public class Tag implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5547900002365413271L;
 	private String value;
 
 	// constructor for a tag

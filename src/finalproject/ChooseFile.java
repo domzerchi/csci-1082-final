@@ -62,28 +62,17 @@ if (e.getSource() == openButton) {
 	if (returnVal == JFileChooser.APPROVE_OPTION) {
 		File file = fchoose.getSelectedFile();
 		
-		System.out.println(file.toString());
+		String filename = file.toString();
 		
-		ObjectInputStream ois = null;
-		try {
-			ois = new ObjectInputStream(new FileInputStream(file.toString()));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		System.out.println(filename);
 		
 		try {
-			data  = (Collection)ois.readObject();
+			data = data.readCollection(filename);
 		} catch (ClassNotFoundException | IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		try {
-			ois.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
 		System.out.println(data.toString());
 		
 		log.append("Opening: " + file.getName() + "." + newline);
@@ -95,7 +84,7 @@ if (e.getSource() == openButton) {
 	
 	
 }else if (e.getSource() == saveButton) {
-	fchoose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	fchoose.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
     int returnVal = fchoose.showSaveDialog(ChooseFile.this);
     if (returnVal == JFileChooser.APPROVE_OPTION) {
         File file = fchoose.getSelectedFile();
@@ -106,28 +95,8 @@ if (e.getSource() == openButton) {
         
         System.out.println(fileName);
         
-		FileOutputStream fout = null;
-		try {
-			fout = new FileOutputStream(fileName);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		ObjectOutputStream oos = null;
-		try {
-			oos = new ObjectOutputStream(fout);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			oos.writeObject(this);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			oos.close();
+        try {
+			data.saveCollection();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
