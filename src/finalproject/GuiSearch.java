@@ -47,7 +47,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 	private JPanel tagPnl;
 	private JPanel tagsPnl;
 	private JLabel tagLbl;
-	Collection data = new Collection("New Database");
+	Collection data = new Collection("New Database"); // needs to be alphabetized
 	ArrayList<JButton> items = new ArrayList<>();
 	ArrayList<JButton> tags = new ArrayList<>();
 	
@@ -65,8 +65,14 @@ public class GuiSearch extends JFrame implements ActionListener {
 	 */
 	public GuiSearch() {
 		initialize();
+		for (int i = 0; i < this.data.getContents().size(); i++) {
+			newItemBtn = new JButton(data.getContents().get(i).getName());
+			newItemBtn.setPreferredSize(new Dimension(100, 100));
+			displayPnl.add(newItemBtn);
+			newItemBtn.addActionListener(this);
+		}
 	}
-
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -189,7 +195,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 	private void setActionListener() {
 		searchFld.addActionListener(this);
 		nameChkbx.addActionListener(this);
-		tagChkbx.addActionListener(this);
+		deleteItemFld.addActionListener(this);
 		addItemFld.addActionListener(this);
 		addTagFld.addActionListener(this);
 		ClxnBtn.addActionListener(this);
@@ -240,7 +246,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 			for (int i = 0; i < data.getContents().size(); i++) {
 				if (data.getContents().contains(searchInput)) {
 					int index = data.getContents().indexOf(searchInput);
-					searchResults.add(data.getContents().get(index));					
+					searchResults.add(data.getContents().get(index));			
 				}
 			}
 		}
@@ -265,6 +271,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 	private void deleteItem(ActionEvent event) { // doesn't work
 		Item oldItem = new Item(deleteItemFld.getText());
 		for (JButton item: items) {
+			System.out.println("Item deleted!");
 			if (event.getActionCommand().equals(item.getName())) {
 				displayPnl.remove(item);
 				displayPnl.revalidate();
@@ -332,7 +339,10 @@ public class GuiSearch extends JFrame implements ActionListener {
 				EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					try {
-						GuiItem window = new GuiItem();
+						int index = items.indexOf(item);
+						data.saveCollection();
+						GuiItem window = new GuiItem(data.getContents().get(index));
+						frame.dispose();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
