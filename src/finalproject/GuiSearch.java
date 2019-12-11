@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -19,7 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import projectfinal.Collection.ItemEnteredTwiceException;
+import finalproject.Collection.ItemEnteredTwiceException;
 
 public class GuiSearch extends JFrame implements ActionListener {
 
@@ -62,18 +63,22 @@ public class GuiSearch extends JFrame implements ActionListener {
 	
 	/**
 	 * Create the application.
+	 * @param collxn 
 	 */
-	public GuiSearch() {
+	public GuiSearch(Collection collxn) {
 		initialize();
-		// initialize the displaypanel
+		data = collxn;
 		for (int i = 0; i < this.data.getContents().size(); i++) {
-			newItemBtn = new JButton(data.getContents().get(i).getName());
-			newItemBtn.setPreferredSize(new Dimension(100, 100));
-			displayPnl.add(newItemBtn);
-			newItemBtn.addActionListener(this);
-			displayPnl.revalidate();
-			displayPnl.repaint();
+			if ((data.getContents().get(i).getName() != null)) {
+				newItemBtn = new JButton(data.getContents().get(i).getName());
+				newItemBtn.setPreferredSize(new Dimension(100, 100));
+				displayPnl.add(newItemBtn);
+				newItemBtn.addActionListener(this);
+				items.add(newItemBtn);
+			}
 		}
+		displayPnl.revalidate();
+		displayPnl.repaint();
 	}
 	
 	/**
@@ -191,8 +196,12 @@ public class GuiSearch extends JFrame implements ActionListener {
 		
 		frame.setBounds(0, 0, 600, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		frame.setVisible(true);	
 		setActionListener();
+
+
+
+		
 	}
 	
 	// sets action listeners
@@ -232,6 +241,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 	 */
 	private void search() { // searching by name AND tag doesn't work correctly
 		displayPnl.removeAll();
+		displayPnl.revalidate();
 		// if the search field is empty, all items in data will be displayed
 		if (addItemFld.getText().trim().isEmpty()) {
 			for (int i = 0; i < data.getContents().size(); i++) {
@@ -367,7 +377,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 					try {
 						int index = items.indexOf(item);
 						data.saveCollection();
-						GuiItem window = new GuiItem(data.getContents().get(index));
+						GuiItem window = new GuiItem(data, index);
 						frame.dispose();
 					} catch (Exception e) {
 						e.printStackTrace();

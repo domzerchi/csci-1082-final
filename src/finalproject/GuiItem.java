@@ -20,6 +20,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
 
+import finalproject.Collection.ItemEnteredTwiceException;
+import finalproject.Item.TagEnteredTwiceException;
+
 public class GuiItem extends JFrame implements ActionListener {
 
 	private JFrame frame;
@@ -39,13 +42,20 @@ public class GuiItem extends JFrame implements ActionListener {
 	private JPanel notesPnl;
 	private JTextField nameFld;
 	
-	Item item = new Item("");
+	private Item item;
+	private int index;
+	private	Collection data;
 	ArrayList<JButton> tags = new ArrayList<>();
 
 	/**
 	 * Create the application.
+	 * @param index 
+	 * @param data 
 	 */
-	public GuiItem() {
+	public GuiItem(Collection data, int index) {
+		this.data = data;
+		this.index = index;
+		item = data.getContents().get(index);
 		initialize();
 	}
 	
@@ -64,9 +74,9 @@ public class GuiItem extends JFrame implements ActionListener {
 		ArrayList<Tag> itemTags = item.getTags();
 		for (int i = 0; i < itemTags.size(); i++) {
 			JButton newTagBtn = new JButton(itemTags.get(i).getValue());
+			tags.add(newTagBtn);
 			tagsPnl.add(newTagBtn);
 			newTagBtn.addActionListener(this);
-			tags.add(newTagBtn);
 		}
 		tagsPnl.revalidate();
 		// set notes
@@ -96,7 +106,7 @@ public class GuiItem extends JFrame implements ActionListener {
 		
 		nameFld = new JTextField();
 		nameFld.setHorizontalAlignment(SwingConstants.CENTER);
-		nameFld.setText("Name");
+		nameFld.setText(item.getName());
 		helperPnl.add(nameFld);
 		nameFld.setColumns(10);
 		
@@ -110,6 +120,7 @@ public class GuiItem extends JFrame implements ActionListener {
 		typeLbl.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		typeFld = new JTextField();
+		typeFld.setText(item.getType());
 		typeFld.setHorizontalAlignment(SwingConstants.LEFT);
 		typePnl.add(typeFld);
 		typeFld.setColumns(10);
@@ -128,6 +139,11 @@ public class GuiItem extends JFrame implements ActionListener {
 		tagFld.setColumns(10);
 		
 		tagsPnl = new JPanel();
+		for (int i = 0; i < item.getTags().size(); i++) {
+			JButton newTagBtn = new JButton(tagFld.getText());
+			tagsPnl.add(newTagBtn);
+			newTagBtn.addActionListener(this);
+		}
 		tagsPnl.setBackground(Color.WHITE);
 		editPnl.add(tagsPnl, BorderLayout.CENTER);
 		
@@ -144,6 +160,7 @@ public class GuiItem extends JFrame implements ActionListener {
 		notesPnl.setLayout(new BorderLayout(0, 0));
 		
 		notesArea = new JTextArea();
+		notesArea.setText(item.getNote());
 		notesPnl.add(notesArea);
 		notesArea.setPreferredSize(new Dimension(584, 200));
 		notesArea.setLineWrap(true);
@@ -165,12 +182,17 @@ public class GuiItem extends JFrame implements ActionListener {
 		tagFld.addActionListener(this);
 		saveBtn.addActionListener(this);
 
+		
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	setName();
+		    	setType();
+		    	saveNotes();
 				item.setNote(notesArea.getText());
-		    	frame.dispose();
-				GuiSearch window = new GuiSearch();
+				data.getContents().set(index, item);
+				frame.dispose();
+				GuiSearch window = new GuiSearch(data);
 		    }
 		});
 	}
@@ -203,11 +225,17 @@ public class GuiItem extends JFrame implements ActionListener {
 	private void addTag() {
 		if (!tagFld.getText().equals("")) {
 		JButton newTagBtn = new JButton(tagFld.getText());
-		tagsPnl.add(newTagBtn);
-		tagsPnl.revalidate();
-		newTagBtn.addActionListener(this);
-		tags.add(newTagBtn);
-		tagFld.setText("");
+		Tag tag = new Tag(tagFld.getText());
+		try {
+			item.addTag(tag);
+			tagsPnl.add(newTagBtn);
+			tagsPnl.revalidate();
+			newTagBtn.addActionListener(this);
+			tags.add(newTagBtn);
+			tagFld.setText("");
+		} catch (TagEnteredTwiceException e) {
+			e.printStackTrace();
+		}
 		}
 	}
 	
