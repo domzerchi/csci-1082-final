@@ -262,10 +262,10 @@ public class GuiSearch extends JFrame implements ActionListener {
 			x = false;
 	}
 	
-	private void deleteItem(ActionEvent event) {
+	private void deleteItem(ActionEvent event) { // doesn't work
 		Item oldItem = new Item(deleteItemFld.getText());
 		for (JButton item: items) {
-			if (event.getSource() == item) {
+			if (event.getActionCommand().equals(item.getName())) {
 				displayPnl.remove(item);
 				displayPnl.revalidate();
 				displayPnl.repaint();
@@ -273,6 +273,7 @@ public class GuiSearch extends JFrame implements ActionListener {
 				break;
 			}
 		}
+		deleteItemFld.setText("");
 	}
 	
 	private void addItem() {
