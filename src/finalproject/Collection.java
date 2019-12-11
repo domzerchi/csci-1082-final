@@ -177,7 +177,7 @@ public class Collection implements Serializable {
 			for(Tag eachTag : tagsToFind) {
 				if(eachItem.getTags().contains(eachTag)) {
 					try {
-						found.addItem(new Item(eachItem.getValue(), eachItem.find(tagsToFind)));
+						found.addItem(new Item(eachItem.getValue()));
 						break;
 					} catch (ItemEnteredTwiceException e) {
 						// TODO Auto-generated catch block
