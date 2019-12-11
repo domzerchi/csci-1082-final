@@ -39,7 +39,7 @@ public class GuiItem extends JFrame implements ActionListener {
 	private JPanel notesPnl;
 	private JTextField nameFld;
 	
-	Item item = new Item();
+	Item item = new Item("");
 	ArrayList<JButton> tags = new ArrayList<>();
 
 	/**
@@ -49,6 +49,10 @@ public class GuiItem extends JFrame implements ActionListener {
 		initialize();
 	}
 	
+	/**
+	 * create the application with an existing item.
+	 * @param input's values are displayed in the frame.
+	 */
 	public GuiItem(Item input) {
 		item = input;
 		initialize();
@@ -186,14 +190,16 @@ public class GuiItem extends JFrame implements ActionListener {
 		}
 	}
 
+	// writes a name in the item's name field.
 	private void setName() {
 		item.setName(nameFld.getText());
 	}
-
+	// writes a type in the item's type field.
 	private void setType() {
 		item.setType(typeFld.getText());
 	}
 	
+	// adds a tag to the item's tags panel.
 	private void addTag() {
 		if (!tagFld.getText().equals("")) {
 		JButton newTagBtn = new JButton(tagFld.getText());
@@ -205,10 +211,12 @@ public class GuiItem extends JFrame implements ActionListener {
 		}
 	}
 	
+	// saves notes
 	private void saveNotes() {
 		item.setNote(notesArea.getText());
 	}
 	
+	// deletes tags when they're clicked.
 	private void checkTags(ActionEvent e) {
 		for (JButton tag: tags) {
 			if (e.getSource() == tag) {
