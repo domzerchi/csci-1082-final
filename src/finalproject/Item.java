@@ -1,6 +1,5 @@
 package finalproject;
 
-//All classes within Collection need to be serializable in order for reading/writing of databases to work
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,18 +9,15 @@ public class Item implements Serializable {
 
 	/**
 	 * @author stephenpolson
+	 * @author ayden sinn
 	 */
+	
 	private String name;
 	private String note;
 	private String type;
 	private ArrayList<Tag> tags;
-	// We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.
-	private boolean isKnownToBeSorted = false;
-
-
-	public String getValue() {
-		return name;
-	}
+//	// We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.
+//	private boolean isSorted = false;
 
 	/**
 	 * constructor for an item.
@@ -56,69 +52,43 @@ public class Item implements Serializable {
 
 	/**
 	 * accessor for tags
-	 * @return the tags
-	 */
-	//TODO probably make a deep copy
+	 * @return tags
+	 */ // create deep copy?
 	public ArrayList<Tag> getTags() {
-		if(!isKnownToBeSorted) {
-			Collections.sort(tags, Tag.CompareByValue);
-			isKnownToBeSorted = true;
-		}
 		return tags;
 	}
-
-	/**
-	 * mutator for tags
-	 * @param tags the tags to set
-	 */
-	public void setTags(ArrayList<Tag> tags) {
-		this.tags = tags;
-		Collections.sort(tags, Tag.CompareByValue);
-		isKnownToBeSorted = true;
-	}
-
-	/**
-	 * @param newTag the tag to add to tags
-	 * @throws TagEnteredTwiceException 
-	 * if tags already contains newTag, do nothing and throw exception
-	 */
-	public void addTag(Tag newTag) throws TagEnteredTwiceException {
-		if(tags.contains(newTag)) {
-			throw new TagEnteredTwiceException();
-		}else {
-			tags.add(newTag);
-			isKnownToBeSorted=false;
+//	public void setTag (int index, String name) { // is this necessary at all?
+//		Tag tag = new Tag(name);
+//		tags.set(index, tag);
+//		Collections.sort(tags, Tag.CompareByTag);
+//	}
+	public void addTag(String name) {
+		Tag tag = new Tag(name);
+		if (!tags.contains(tag)) {
+			tags.add(tag);
+			Collections.sort(tags, Tag.CompareByTag);
 		}
 	}
-
-	/**
-	 * attempt to delete a tag then return the results.
-	 * @param tag the potential tag to be deleted
-	 * @return whether or not the tag was successfully removed
-	 */
-	public boolean deleteTag(Tag tag) {
-		return tags.remove(tag);
+	public boolean removeTag(String name) {
+		Tag tag = new Tag(name);
+		if (tags.remove(tag)) {
+			Collections.sort(tags, Tag.CompareByTag);
+			return true;
+		} else {
+			return false;
+		}
 	}
-
-	public ArrayList<Tag> find(ArrayList<Tag> tagsToFind) {
+	public ArrayList<Tag> findTags (ArrayList<Tag> tagsToFind) {
 		ArrayList<Tag> found = new ArrayList<Tag>();
 		for(Tag element : tagsToFind) {
 			if(tags.contains(element)) {
 				found.add(element);
 			}
 		}
+		Collections.sort(found, Tag.CompareByTag);
 		return found;
 	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-	
-	// returns an item's list of variables in a string
+
 	@Override
 	public String toString() {
 		String info = "Item: " + getName();
@@ -128,57 +98,59 @@ public class Item implements Serializable {
 		if(note != null) {
 			info += "\nNotes: " + getNote();
 		}
-		if(!isKnownToBeSorted) {
-			Collections.sort(tags, Tag.CompareByValue);
-			isKnownToBeSorted = true;
-		}
 		info += "\nTags:";
 		for(int i = 0; i < tags.size(); i++) {
-
 			info += "\n" + tags.get(i).toString();
 		}
 		return info;
 	}
 
-	// tests that two item's names are the same
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Item other = (Item) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		Item other = (Item) obj;
+//		if (name == null) {
+//			if (other.name != null)
+//				return false;
+//		} else if (!name.equals(other.name))
+//			return false;
+//		return true;
+//	}
 
-	public static Comparator<Item> CompareByValue = new Comparator<Item>() {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+	
+	public static Comparator<Item> CompareByName = new Comparator<Item>() {
 		@Override
 		public int compare(Item o1, Item o2) {
-			return o1.getValue().compareTo(o2.getValue());
+			return o1.getName().compareToIgnoreCase(o2.getName());
+		}
+	};
+
+	public static Comparator<Item> CompareByType = new Comparator<Item>() {
+		@Override
+		public int compare(Item o1, Item o2) {
+			return o1.getType().compareToIgnoreCase(o2.getType());
 		}
 	};
 	
 	public class TagEnteredTwiceException extends Exception {
-
 		private static final long serialVersionUID = 1L;
-
 		public TagEnteredTwiceException() {
 			super("That Tag has already been added!");
 		}
-
-		/**
-		 * @param message
-		 */
 		public TagEnteredTwiceException(String message) {
 			super(message);
 		}
 	}	
-
 }
