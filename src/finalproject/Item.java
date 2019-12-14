@@ -62,12 +62,15 @@ public class Item implements Serializable {
 //		tags.set(index, tag);
 //		Collections.sort(tags, Tag.CompareByTag);
 //	}
-	public void addTag(String name) {
+	public boolean addTag(String name) {
 		Tag tag = new Tag(name);
 		if (!tags.contains(tag)) {
-			tags.add(tag);
-			Collections.sort(tags, Tag.CompareByTag);
+			if (tags.add(tag)) {
+				Collections.sort(tags, Tag.CompareByTag);
+				return true;
+			}
 		}
+		return false;
 	}
 	public boolean removeTag(String name) {
 		Tag tag = new Tag(name);
