@@ -156,27 +156,17 @@ public class Collection implements Serializable {
 
 	}
 
-
-
-
 	/**
 	 * searches contents for a certain item
-	 * @param itemsToFind the single(1) item to find and return
+	 * @param element the single(1) item to find and return
 	 * @return found a collection with the found item
 	 */
-	public Collection find(ArrayList<Item> itemsToFind) {	//search for 1 item
-		Collection found = new Collection();
-		for(Item element : itemsToFind) {
-			if(contents.contains(element)) {
-				try {
-					found.addItem(element);
-				} catch (ItemEnteredTwiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		return found;
+	public Item find(Item element) {
+		int foundAt = contents.indexOf(element);
+		if (foundAt < 0) {
+			return null;// since we are returning the item found and nothing was found, we have to return null?
+		} 
+		return contents.get(foundAt);
 	}
 
 	/**

@@ -57,7 +57,7 @@ public class Item implements Serializable {
 	public ArrayList<Tag> getTags() {
 		return tags;
 	}
-<<<<<<< HEAD
+
 
 	/**
 	 * @param tag Tag to add to Array List tags
@@ -77,8 +77,7 @@ public class Item implements Serializable {
 	 * @param name name of new Tag to create and add to Array List tags
 	 * @return add was successful or not
 	 */
-=======
->>>>>>> branch 'master' of https://github.com/domzerchi/csci-1082-final
+
 	public boolean addTag(String name) {
 		Tag tag = new Tag(name);
 		if (!tags.contains(tag)) {
@@ -124,6 +123,11 @@ public class Item implements Serializable {
 		return info;
 	}
 
+	/**
+	 * equals() should return true as long as the name matches. It has to be like that for searching to work.
+	 * If we discover this is going to be an issue, we should specifically create a message (exactlyEquals()?)
+	 * that makes sure they are exactly the same.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj != null) {
