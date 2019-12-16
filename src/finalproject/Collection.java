@@ -190,24 +190,6 @@ public class Collection implements Serializable {
 		return tagsFound;
 	}
 
-	/**
-	 * creates an array of items that have certain tags and returns the array
-	 * @param tagsToFind an array list with the tags to find
-	 * @return an array with all the items
-	 */
-	public ArrayList<Tag> findTag(ArrayList<Tag> tagsToFind){
-		ArrayList<Tag> found = new ArrayList<Tag>();
-		for(Tag eachTag : tagsToFind) {
-			for(Item eachItem : contents) {
-				if(eachItem.getTags().contains(eachTag)) {
-					found.add(eachTag);
-					break;
-				}
-			}
-		}
-		return found;
-	}
-
 	// converts collection to a string
 	@Override
 	public String toString() {
