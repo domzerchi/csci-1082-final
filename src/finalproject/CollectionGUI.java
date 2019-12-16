@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,10 +22,11 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
+//import edu.century.pa5.Product;
+
 public class CollectionGUI extends JFrame implements ActionListener {
 
-	private JFrame searchFrame;
-	private JPanel cardPnl;
+	private JFrame frame;
 	private JPanel searchEditPnl;
 	private JPanel searchByPnl;
 	private JPanel searchSettingsPnl;
@@ -47,12 +49,13 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	
 	private JCheckBox nameChkbx;
 	private JCheckBox tagChkbx;
+	private JCheckBox typeChkbx;
 	
 	private JButton ClxnBtn;
 	private JButton newItemBtn;
 	
-	private JPanel SearchGui;
-	private JPanel ItemGui;
+	private JPanel searchGui;
+	private JPanel itemGui;
 	private JPanel itemEditPnl;
 	private JPanel itemSettingsPnl;
 	private JButton backBtn;
@@ -63,17 +66,22 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	private JLabel addTagLbl;
 	private JTextField addTagFld;
 	private JTextField nameFld;
-	private JPanel panel;
-	private JTextArea textArea;
-	
-	ArrayList<Item> collection = new ArrayList<>();
-//	ArrayList<JButton> items = new ArrayList<>();
-//	ArrayList<JButton> tags = new ArrayList<>();
+	private JPanel itemTagsPnl;
+	private JTextArea notesArea;
+	CardLayout card = new CardLayout(0, 0);
+
+	private Item currentItem;
+	private ArrayList<Item> collection = new ArrayList<>();
+	private ArrayList<Tag> tagBtns = new ArrayList<>();
+	private FileIO file = new FileIO();
 	
 	private boolean nameX = true;
 	private boolean tagX = false;
-	private JCheckBox typeChkbx;
+	private boolean typeX = false;
 	private JTextField clxnFld;
+	private JPanel filePnl;
+	private JButton SaveBtn;
+
 	
 	/**
 	 * Launch the application.
@@ -92,30 +100,21 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	 */
 	public CollectionGUI() {
 		initializeSearch();
-		// initialize the displaypanel
-//		for (int i = 0; i < this.data.getContents().size(); i++) {
-//			newItemBtn = new JButton(data.getContents().get(i).getName());
-//			newItemBtn.setPreferredSize(new Dimension(100, 100));
-//			displayPnl.add(newItemBtn);
-//			newItemBtn.addActionListener(this);
-//			displayPnl.revalidate();
-//			displayPnl.repaint();
-//		}
 	}
 	
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initializeSearch() {
-		searchFrame = new JFrame();
-		searchFrame.getContentPane().setLayout(new CardLayout(0, 0));
+		frame = new JFrame();
+		frame.getContentPane().setLayout(card);
 		
-		SearchGui = new JPanel();
-		searchFrame.getContentPane().add(SearchGui, "name_119297892460500");
-		SearchGui.setLayout(new BorderLayout(0, 0));
+		searchGui = new JPanel();
+		frame.getContentPane().add(searchGui, "search");
+		searchGui.setLayout(new BorderLayout(0, 0));
 		
 		searchEditPnl = new JPanel();
-		SearchGui.add(searchEditPnl, BorderLayout.EAST);
+		searchGui.add(searchEditPnl, BorderLayout.EAST);
 		searchEditPnl.setPreferredSize(new Dimension(250, 100));
 		searchEditPnl.setLayout(new BorderLayout(0, 0));
 		
@@ -124,12 +123,19 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		searchEditPnl.add(searchSettingsPnl, BorderLayout.NORTH);
 		searchSettingsPnl.setLayout(new GridLayout(7, 0, 0, 0));
 		
-		ClxnBtn = new JButton("Create/Open Collection...");
-		searchSettingsPnl.add(ClxnBtn);
+		filePnl = new JPanel();
+		searchSettingsPnl.add(filePnl);
+		filePnl.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		ClxnBtn = new JButton("Browse...");
+		filePnl.add(ClxnBtn);
+		
+		SaveBtn = new JButton("Save");
+		filePnl.add(SaveBtn);
 		
 		clxnFld = new JTextField();
 		clxnFld.setHorizontalAlignment(SwingConstants.CENTER);
-		clxnFld.setText("placeholder");
+		clxnFld.setText("database");
 		searchSettingsPnl.add(clxnFld);
 		clxnFld.setColumns(10);
 		
@@ -210,22 +216,23 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		searchEditPnl.add(tagsPnl, BorderLayout.CENTER);
 		
 		displayPnl = new JPanel(); // not scrollable because I am not smart
-		SearchGui.add(displayPnl, BorderLayout.CENTER);
+		searchGui.add(displayPnl, BorderLayout.CENTER);
 		displayPnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		displayPnl.setBackground(Color.WHITE);
 		FlowLayout flowLayout = (FlowLayout) displayPnl.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		
-		ItemGui = new JPanel();
-		searchFrame.getContentPane().add(ItemGui, "name_119525656447200");
-		ItemGui.setLayout(new BorderLayout(0, 0));
+		itemGui = new JPanel();
+		frame.getContentPane().add(itemGui, "item");
+		itemGui.setLayout(new BorderLayout(0, 0));
 		
 		itemEditPnl = new JPanel();
 		itemEditPnl.setPreferredSize(new Dimension(250, 100));
-		ItemGui.add(itemEditPnl, BorderLayout.EAST);
+		itemGui.add(itemEditPnl, BorderLayout.EAST);
 		itemEditPnl.setLayout(new BorderLayout(0, 0));
 		
 		itemSettingsPnl = new JPanel();
+		itemSettingsPnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		itemEditPnl.add(itemSettingsPnl, BorderLayout.NORTH);
 		itemSettingsPnl.setLayout(new GridLayout(4, 0, 0, 0));
 		
@@ -233,6 +240,7 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		itemSettingsPnl.add(backBtn);
 		
 		nameFld = new JTextField();
+		nameFld.setHorizontalAlignment(SwingConstants.CENTER);
 		itemSettingsPnl.add(nameFld);
 		nameFld.setColumns(10);
 		
@@ -262,16 +270,19 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		addTagPnl.add(addTagFld);
 		addTagFld.setColumns(10);
 		
-		panel = new JPanel();
-		panel.setBackground(Color.WHITE);
-		itemEditPnl.add(panel, BorderLayout.CENTER);
+		itemTagsPnl = new JPanel();
+		itemTagsPnl.setBorder(new LineBorder(new Color(0, 0, 0)));
+		itemTagsPnl.setBackground(Color.WHITE);
+		itemEditPnl.add(itemTagsPnl, BorderLayout.CENTER);
 		
-		textArea = new JTextArea();
-		ItemGui.add(textArea, BorderLayout.CENTER);
+		notesArea = new JTextArea();
+		notesArea.setWrapStyleWord(true);
+		notesArea.setLineWrap(true);
+		itemGui.add(notesArea, BorderLayout.CENTER);
 		
-		searchFrame.setBounds(0, 0, 600, 600);
-		searchFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		searchFrame.setVisible(true);
+		frame.setBounds(0, 0, 600, 600);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 		setActionListener();
 	}
 	
@@ -279,10 +290,17 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	private void setActionListener() {
 		searchFld.addActionListener(this);
 		nameChkbx.addActionListener(this);
+		typeChkbx.addActionListener(this);
 		deleteItemFld.addActionListener(this);
 		addItemFld.addActionListener(this);
 		searchTagFld.addActionListener(this);
 		ClxnBtn.addActionListener(this);
+		SaveBtn.addActionListener(this);
+		
+		backBtn.addActionListener(this);
+		nameFld.addActionListener(this);
+		typeFld.addActionListener(this);
+		addTagFld.addActionListener(this);
 	}
 	
 	@Override
@@ -293,61 +311,64 @@ public class CollectionGUI extends JFrame implements ActionListener {
 			checkBox(nameX);
 		} else if (event.getSource() == tagChkbx) {
 			checkBox(tagX);
+		} else if (event.getSource() == typeChkbx) {
+			checkBox(typeX);
 		} else if (event.getSource() == deleteItemFld) {
 			deleteItem(event);
 		} else if (event.getSource() == addItemFld) {
 			addItem();
 		} else if (event.getSource() == searchTagFld) {
-			addTag();
+			addSearchTag();
 		} else if (event.getSource() == ClxnBtn) {
-			fileChooser();
+			chooseFile();
+		} else if (event.getSource() == SaveBtn) {
+			saveFile();
+		} else if (event.getSource() == backBtn) {
+			backToSearch();
+		} else if (event.getSource() == nameFld) {
+			currentItem.setName(nameFld.getText());
+		} else if (event.getSource() == typeFld) {
+			currentItem.setType(typeFld.getText());
+		} else if (event.getSource() == addTagFld) {
+			addItemTag(event);
 		} else {
+			checkItemTags(event);
 			checkTags(event);
 			checkItems(event);
 		}
 	}
 
-	private void search() { // god why
-//		displayPnl.removeAll();
-//		// if the search field is empty, all items in data will be displayed
-//		if (addItemFld.getText().trim().isEmpty()) {
-//			for (int i = 0; i < data.getContents().size(); i++) {
-//				newItemBtn = new JButton(data.getContents().get(i).getName());
-//				newItemBtn.setPreferredSize(new Dimension(100, 100));
-//				displayPnl.add(newItemBtn);
-//				newItemBtn.addActionListener(this);
-//			}
-//		}
-//		ArrayList<Item> searchResults = new ArrayList<>();
-//		Item searchInput = new Item(searchFld.getText());
-//		// searches through names of items in data, then adds them to searchResults
-//		if (nameX) {
-//			if (data.getContents().contains(searchInput)) {
-//				int index = data.getContents().indexOf(searchInput);
-//				searchResults.add(data.getContents().get(index));
-//			}
-//		}
-//		// searches through names of items in data, then adds them to searchResults		
-//		if (tagX) {
-//			for (int i = 0; i < data.getContents().size(); i++) {
-//				if (data.getContents().contains(searchInput)) {
-//					int index = data.getContents().indexOf(searchInput);
-//					searchResults.add(data.getContents().get(index));			
-//				}
-//			}
-//		}
-//		// displays all items in searchResults
-//		for (int i = 0; i < searchResults.size(); i++) {
-//			newItemBtn = new JButton(searchResults.get(i).getName());
-//			newItemBtn.setPreferredSize(new Dimension(100, 100));
-//			displayPnl.add(newItemBtn);
-//			newItemBtn.addActionListener(this);
-//		}
-//		displayPnl.revalidate();
-//		displayPnl.repaint();
-//		searchFld.setText("");
+	private void search() {
+		ArrayList<Item> searchResults = new ArrayList<>();
+		// check name
+		if (nameX) {
+			Item i = new Item(searchFld.getText());
+			if (collection.contains(i)) {
+				searchResults.add(i);
+			}
+		// check type
+		}
+		if (typeX) { // not tested yet
+			for (Item i: collection) {
+				if (i.getType().equals(searchFld.getText())) {
+					searchResults.add(i);
+				}
+			}
+		}
+		// check tags
+		if (tagX) { // not tested yet
+			ArrayList<Item> toRemove = new ArrayList<>();
+			for (Item i: searchResults) {
+				if (!i.hasTags(tagBtns)) {
+					toRemove.add(i);
+				}
+			}
+			searchResults.removeAll(toRemove);
+		}
+		updateDisplay(searchResults);
+		searchFld.setText("");
 	}
-
+	
 	private void checkBox(boolean x) {
 		if (x == false)
 			x = true;
@@ -355,21 +376,22 @@ public class CollectionGUI extends JFrame implements ActionListener {
 			x = false;
 	}
 	
-	private void deleteItem(ActionEvent event) { // doesn't work
-//		Item oldItem = new Item(deleteItemFld.getText());
-//		for (JButton item: items) {
-//			System.out.println("Item deleted!");
-//			if (event.getActionCommand().equals(item.getName())) {
-//				displayPnl.remove(item);
-//				displayPnl.revalidate();
-//				displayPnl.repaint();
-//				data.deleteItem(oldItem);
-//				break;
-//			}
-//		}
-//		deleteItemFld.setText("");
+	private void deleteItem(ActionEvent event) {
+		int index = -1;
+		Item oldItem = new Item(deleteItemFld.getText());
+		for (Item i: collection) {
+			if (i.equals(oldItem)) {
+				index = collection.indexOf(i);
+				break;
+			}
+		}
+		if (index != -1) {
+			collection.remove(index);
+			updateDisplay(collection);
+		}
+		deleteItemFld.setText("");
 	}
-	
+
 	private void addItem() {
 		Item newItem = new Item(addItemFld.getText());
 		// items only get created if they have a name
@@ -377,69 +399,138 @@ public class CollectionGUI extends JFrame implements ActionListener {
 			// items only created if its name doesn't already exist
 			if (!collection.contains(newItem)) {
 				collection.add(newItem);
-				createItemBtn(newItem);			
+				updateDisplay(collection);
 			}
 		}
 		addItemFld.setText("");
 	}
-
-	public void createItemBtn(Item item) {
-		newItemBtn = new JButton(addItemFld.getText());
-		newItemBtn.setPreferredSize(new Dimension(100, 100));
-		displayPnl.add(newItemBtn);
+	
+	private void updateDisplay(ArrayList<Item> list) {
+		Collections.sort(list, Item.CompareByName);
+		list.trimToSize();
+		displayPnl.removeAll();
+		for (Item i: list) {
+			JButton iBtn = new JButton(i.getName());
+//			iBtn.setPreferredSize(new Dimension(100, 100));
+			iBtn.addActionListener(this);
+			displayPnl.add(iBtn);
+		}
+		displayPnl.repaint();
 		displayPnl.revalidate();
-		newItemBtn.addActionListener(this);
 	}
 	
 	// adds a tag to the tags panel.
-	private void addTag() {
-//		if (!addTagFld.getText().equals("")) {
-//		JButton newTagBtn = new JButton(addTagFld.getText());
-//		tagsPnl.add(newTagBtn);
-//		tagsPnl.revalidate();
-//		newTagBtn.addActionListener(this);
-//		tags.add(newTagBtn);
-//		addTagFld.setText("");
-//		}
+	private void addSearchTag() {
+		Tag newTag = new Tag(searchTagFld.getText());
+		if (!searchTagFld.getText().trim().isEmpty()) {
+			if (!tagBtns.contains(newTag)) {
+				tagBtns.add(newTag);
+				updateSearchTags();
+			}
+		}
+		search();
+		searchTagFld.setText("");
+	}
+
+	private void updateSearchTags() {
+		Collections.sort(tagBtns, Tag.CompareByTag);
+		tagBtns.trimToSize();
+		tagsPnl.removeAll();
+		for (Tag t: tagBtns) {
+			JButton tBtn = new JButton(t.getTag());
+			tBtn.addActionListener(this);
+			tagsPnl.add(tBtn);
+		}
+		tagsPnl.repaint();
+		tagsPnl.revalidate();
+	}
+
+	private void chooseFile() {
+		collection = file.browse();
+		updateDisplay(collection);
 	}
 	
-	private void fileChooser() {
-//		// close guiSearch window
-//		ChooseFile fileChooser = new ChooseFile();
-//		fileChooser.setVisible(true);
-//		frame.dispose();
+	private void saveFile() {
+		file.writeTo(clxnFld.getText(), collection);
 	}
 	
 	// when a tag is clicked, it gets removed.
 	private void checkTags(ActionEvent event) {
-//		for (JButton tag: tags) {
-//			if (event.getSource() == tag) {
-//				tagsPnl.remove(tag);
-//				tagsPnl.revalidate();
-//				tagsPnl.repaint();
-//				tags.remove(tag);
-//				break;
-//			}
-//		}
+		int index = -1;
+		Tag oldTag = new Tag(event.getActionCommand());
+		for (Tag t: tagBtns) {
+			if (t.equals(oldTag)) {
+				index = tagBtns.indexOf(t);
+				break;
+			}
+		}
+		if (index != -1) {
+			tagBtns.remove(index);
+			updateSearchTags();
+		}
 	}
 	
 	private void checkItems(ActionEvent event) {
-//		for (JButton item: items) {
-//			if (event.getSource() == item) {
-//				EventQueue.invokeLater(new Runnable() {
-//				public void run() {
-//					try {
-//						int index = items.indexOf(item);
-//						data.saveCollection();
-//						GuiItem window = new GuiItem(data.getContents().get(index));
-//						frame.dispose();
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			});
-//			}
-//		}
+		Item temp = new Item(event.getActionCommand()); // ugh
+		int index = collection.indexOf(temp);
+		currentItem = collection.get(index);
+		nameFld.setText(currentItem.getName());
+		notesArea.setText(currentItem.getNote());
+		typeFld.setText(currentItem.getType());
+		updateItemTags();
+		
+		searchGui.setVisible(false);
+		itemGui.setVisible(true);
 	}
-	
+
+	private void backToSearch() {
+		currentItem.setNote(notesArea.getText());
+		itemGui.setVisible(false);
+		searchGui.setVisible(true);
+		updateDisplay(collection);
+	}
+
+	private void addItemTag(ActionEvent event) {
+		Tag newTag = new Tag(addTagFld.getText());
+		if (!addTagFld.getText().trim().isEmpty()) {
+			if (!currentItem.getTags().contains(newTag)) {
+				currentItem.addTag(newTag.getTag());
+					updateItemTags();
+			}
+		}
+		search();
+		addTagFld.setText("");
+	}
+
+	private void updateItemTags() {
+		Collections.sort(currentItem.getTags(), Tag.CompareByTag);
+		currentItem.getTags().trimToSize();
+		itemTagsPnl.removeAll();
+		for (Tag t: currentItem.getTags()) {
+			JButton tBtn = new JButton(t.getTag());
+			tBtn.addActionListener(this);
+			itemTagsPnl.add(tBtn);
+		}
+		itemTagsPnl.repaint();
+		itemTagsPnl.revalidate();
+	}
+
+	private void checkItemTags(ActionEvent event) {
+		if (currentItem != null) {
+		int index = -1;
+		Tag oldTag = new Tag(event.getActionCommand());
+		if (currentItem.getTags() != null) {
+			for (Tag t: currentItem.getTags()) {
+				if (t.equals(oldTag)) {
+					index = currentItem.getTags().indexOf(t);
+					break;
+				}
+			}	
+		}
+		if (index != -1) {
+			currentItem.getTags().remove(index);
+			updateSearchTags();
+		}
+	}
+	}
 }
