@@ -1,9 +1,11 @@
 package finalproject;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class Tag {
-
+public class Tag implements Serializable {
+	// in order for saving and opening collections to work, not only does Collection have to be serializable
+	// but so do the classes in Collection
 	private String name;
 
 	// constructor for a tag

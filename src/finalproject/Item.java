@@ -57,11 +57,25 @@ public class Item implements Serializable {
 	public ArrayList<Tag> getTags() {
 		return tags;
 	}
-//	public void setTag (int index, String name) { // is this necessary at all?
-//		Tag tag = new Tag(name);
-//		tags.set(index, tag);
-//		Collections.sort(tags, Tag.CompareByTag);
-//	}
+
+	/**
+	 * @param tag Tag to add to Array List tags
+	 * @return add was successful or not
+	 */
+	public boolean addTag(Tag tag) {
+		if (!tags.contains(tag)) {
+			if (tags.add(tag)) {
+				Collections.sort(tags, Tag.CompareByTag);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @param name name of new Tag to create and add to Array List tags
+	 * @return add was successful or not
+	 */
 	public boolean addTag(String name) {
 		Tag tag = new Tag(name);
 		if (!tags.contains(tag)) {
@@ -72,6 +86,7 @@ public class Item implements Serializable {
 		}
 		return false;
 	}
+	
 	public boolean removeTag(String name) {
 		Tag tag = new Tag(name);
 		if (tags.remove(tag)) {

@@ -83,9 +83,9 @@ public class Collection implements Serializable {
 	 * getter for array list content
 	 * @return the items that make up the database
 	 */
-	public ArrayList<Item> getContents() { // fix thisssss
+	public ArrayList<Item> getContents() { 
 		if(!isKnownToBeSorted) {
-			Collections.sort(contents, Item.CompareByValue);
+			Collections.sort(contents, Item.CompareByName);
 			isKnownToBeSorted = true;
 		}
 		return contents;
@@ -98,7 +98,7 @@ public class Collection implements Serializable {
 	public void setContents(ArrayList<Item> contents) {
 		this.contents = contents;
 		if(!isKnownToBeSorted) {
-			Collections.sort(contents, Item.CompareByValue);
+			Collections.sort(contents, Item.CompareByName);
 			isKnownToBeSorted = true;
 		}
 	}
@@ -190,7 +190,7 @@ public class Collection implements Serializable {
 			for(Tag eachTag : tagsToFind) {
 				if(eachItem.getTags().contains(eachTag)) {
 					try {
-						found.addItem(new Item(eachItem.getValue()));
+						found.addItem(new Item(eachItem.getName()));
 						break;
 					} catch (ItemEnteredTwiceException e) {
 						// TODO Auto-generated catch block
@@ -224,7 +224,7 @@ public class Collection implements Serializable {
 	@Override
 	public String toString() {
 		if(!isKnownToBeSorted) {
-			Collections.sort(contents, Item.CompareByValue);
+			Collections.sort(contents, Item.CompareByName);
 			isKnownToBeSorted = true;
 		}
 		String info = "Collection " + name + "[contents=\n";
