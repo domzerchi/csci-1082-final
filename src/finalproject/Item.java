@@ -16,8 +16,6 @@ public class Item implements Serializable {
 	private String note;
 	private String type;
 	private ArrayList<Tag> tags;
-//	// We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.
-//	private boolean isSorted = false;
 
 	/**
 	 * constructor for an item.
@@ -27,6 +25,8 @@ public class Item implements Serializable {
 	 */
 	public Item(String name) {
 		this.name = name;
+		note = "note";
+		type = "type";
 		tags = new ArrayList<Tag>();
 	}
 
@@ -57,11 +57,6 @@ public class Item implements Serializable {
 	public ArrayList<Tag> getTags() {
 		return tags;
 	}
-//	public void setTag (int index, String name) { // is this necessary at all?
-//		Tag tag = new Tag(name);
-//		tags.set(index, tag);
-//		Collections.sort(tags, Tag.CompareByTag);
-//	}
 	public boolean addTag(String name) {
 		Tag tag = new Tag(name);
 		if (!tags.contains(tag)) {
@@ -81,15 +76,13 @@ public class Item implements Serializable {
 			return false;
 		}
 	}
-	public ArrayList<Tag> findTags (ArrayList<Tag> tagsToFind) {
-		ArrayList<Tag> found = new ArrayList<Tag>();
-		for(Tag element : tagsToFind) {
-			if(tags.contains(element)) {
-				found.add(element);
+	public boolean hasTags(ArrayList<Tag> tagList) { // hasn't been tested
+		for (Tag t: tagList) {
+			if (!tags.contains(t)) {
+				return false;
 			}
 		}
-		Collections.sort(found, Tag.CompareByTag);
-		return found;
+		return true;
 	}
 
 	@Override
