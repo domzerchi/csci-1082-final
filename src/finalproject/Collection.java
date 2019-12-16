@@ -172,24 +172,22 @@ public class Collection implements Serializable {
 	/**
 	 * (should) find all items that include all the tags in a given arraylist
 	 * @param tagsToFind the potential multiple tags to find and return
-	 * @return found a collection with all items that have the tags
+	 * @return an arraylist of all tags found
 	 */
-	public Collection containsTags(ArrayList<Tag> tagsToFind) {	//return a list of tags
-		Collection found = new Collection();
-		for(Item eachItem : contents) {
-			for(Tag eachTag : tagsToFind) {
-				if(eachItem.getTags().contains(eachTag)) {
-					try {
-						found.addItem(new Item(eachItem.getName()));
-						break;
-					} catch (ItemEnteredTwiceException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+	public ArrayList<Tag> containsTags(ArrayList<Tag> tagsToFind) {	
+		ArrayList<Tag> tagsFound = new ArrayList<Tag>();
+		for(Tag tagToFind : tagsToFind) {
+			
+			for(Item nextItem : contents) {
+				if(nextItem.getTags().contains(tagToFind)) {
+					tagsFound.add(tagToFind);
+					break;
 				}
 			}
 		}
-		return found;
+		if(tagsFound.size() > 0)
+			Collections.sort(tagsFound, Tag.CompareByTag);
+		return tagsFound;
 	}
 
 	/**
