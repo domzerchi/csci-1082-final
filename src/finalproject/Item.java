@@ -1,6 +1,5 @@
 package finalproject;
 
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,62 +8,34 @@ import java.util.Comparator;
 public class Item implements Serializable {
 
 	/**
-		 * @author stephenpolson
-		 *
-		 */
-	private String value;//value = name
+	 * @author stephenpolson
+	 * @author ayden sinn
+	 */
+	
+	private String name;
 	private String note;
 	private String type;
 	private ArrayList<Tag> tags;
-	private transient BufferedImage img;
-	
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
+//	// We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.
+//	private boolean isSorted = false;
 
 	/**
-	 * @param value the value to set
+	 * constructor for an item.
+	 * Items will only ever be created with just a name,
+	 * so there's only one constructor.
+	 * @param name the name of the item
 	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	/**
-	 * We will sort tags before displaying, accessing, etc., but if tags is already sorted, we won't bother.
-	 */
-	private boolean isKnownToBeSorted = false;
-	
-	/**
-	 * 
-	 */
-	public Item() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 	public Item(String name) {
-		this.value = name;
+		this.name = name;
 		tags = new ArrayList<Tag>();
 	}
-	
-	public Item(String name, int initialSize) {
-		this.value = name;
-		tags = new ArrayList<Tag>(initialSize);
-	}
-	
-	public Item(String name, ArrayList<Tag> tags) {
-		this.value = name;
-		this.tags = new ArrayList<Tag>(tags);
-	}
-	
+
+	// accessors and mutators
 	public String getName() {
-		return value;
+		return name;
 	}
 	public void setName(String name) {
-		this.value = name;
+		this.name = name;
 	}
 	public String getNote() {
 		return note;
@@ -78,53 +49,46 @@ public class Item implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 	/**
-	 * @return the tags
-	 */
-	//TODO probably make a deep copy
+	 * accessor for tags
+	 * @return tags
+	 */ // create deep copy?
 	public ArrayList<Tag> getTags() {
-		if(!isKnownToBeSorted) {
-			Collections.sort(tags, Tag.CompareByValue);
-			isKnownToBeSorted = true;
-		}
 		return tags;
 	}
-
-	/**
-	 * @param tags the tags to set
-	 */
-	public void setTags(ArrayList<Tag> tags) {
-		this.tags = tags;
-		Collections.sort(tags, Tag.CompareByValue);
-		isKnownToBeSorted = true;
+//	public void setTag (int index, String name) { // is this necessary at all?
+//		Tag tag = new Tag(name);
+//		tags.set(index, tag);
+//		Collections.sort(tags, Tag.CompareByTag);
+//	}
+	public boolean addTag(String name) {
+		Tag tag = new Tag(name);
+		if (!tags.contains(tag)) {
+			if (tags.add(tag)) {
+				Collections.sort(tags, Tag.CompareByTag);
+				return true;
+			}
+		}
+		return false;
 	}
-
-	/**
-	 * @param newTag the tag to add to tags
-	 * @throws TagEnteredTwiceException 
-	 * if tags already contains newTag, do nothing and throw exception
-	 */
-	public void addTag(Tag newTag) throws TagEnteredTwiceException {
-		if(tags.contains(newTag)) {
-			throw new TagEnteredTwiceException();
-		}else {
-			tags.add(newTag);
-			isKnownToBeSorted=false;
+	public boolean removeTag(String name) {
+		Tag tag = new Tag(name);
+		if (tags.remove(tag)) {
+			Collections.sort(tags, Tag.CompareByTag);
+			return true;
+		} else {
+			return false;
 		}
 	}
-	
-	public boolean deleteTag(Tag tag) {
-		return tags.remove(tag);
-	}
-	
-	public ArrayList<Tag> find(ArrayList<Tag> tagsToFind) {
+	public ArrayList<Tag> findTags (ArrayList<Tag> tagsToFind) {
 		ArrayList<Tag> found = new ArrayList<Tag>();
 		for(Tag element : tagsToFind) {
 			if(tags.contains(element)) {
 				found.add(element);
 			}
 		}
+		Collections.sort(found, Tag.CompareByTag);
 		return found;
 	}
 
@@ -137,82 +101,55 @@ public class Item implements Serializable {
 		if(note != null) {
 			info += "\nNotes: " + getNote();
 		}
-		
-		if(!isKnownToBeSorted) {
-			Collections.sort(tags, Tag.CompareByValue);
-			isKnownToBeSorted = true;
-		}
 		info += "\nTags:";
 		for(int i = 0; i < tags.size(); i++) {
-			
-				info += "\n" + tags.get(i).toString();
-			
+			info += "\n" + tags.get(i).toString();
 		}
-		
 		return info;
-	}
-	
-public static Comparator<Item> CompareByValue = new Comparator<Item>() {
-		
-		@Override
-		public int compare(Item o1, Item o2) {
-			return o1.getValue().compareTo(o2.getValue());
-		}
-	};
-	
-@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
-		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Item other = (Item) obj;
-		if (value == null) {
-			if (other.value != null)
-				return false;
-		} else if (!value.equals(other.value))
-			return false;
-		return true;
+		if (obj != null) {
+			if (getClass() == obj.getClass()) {
+				Item other = (Item) obj;	
+				if (name.equals(other.name)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
-/**
-	 * @return the img
-	 */
-	public BufferedImage getImg() {
-		return img;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
-
-	/**
-	 * @param img the img to set
-	 */
-	public void setImg(BufferedImage img) {
-		this.img = img;
-	}
-
-public class TagEnteredTwiceException extends Exception {
-
-	private static final long serialVersionUID = 1L;
-
-	public TagEnteredTwiceException() {
-		super("That Tag has already been added!");
-	}
-
-	/**
-	 * @param message
-	 */
-	public TagEnteredTwiceException(String message) {
-		super(message);
-	}
-	}	
 	
+	public static Comparator<Item> CompareByName = new Comparator<Item>() {
+		@Override
+		public int compare(Item o1, Item o2) {
+			return o1.getName().compareToIgnoreCase(o2.getName());
+		}
+	};
+
+	public static Comparator<Item> CompareByType = new Comparator<Item>() {
+		@Override
+		public int compare(Item o1, Item o2) {
+			return o1.getType().compareToIgnoreCase(o2.getType());
+		}
+	};
+	
+	public class TagEnteredTwiceException extends Exception {
+		private static final long serialVersionUID = 1L;
+		public TagEnteredTwiceException() {
+			super("That Tag has already been added!");
+		}
+		public TagEnteredTwiceException(String message) {
+			super(message);
+		}
+	}	
 }

@@ -36,7 +36,6 @@ public class Driver2 {
 			BufferedImage blueTarantulaImg;
 			String fileName = "GootySapphireOrn.jpg";
 			blueTarantulaImg = ImageIO.read(new File(fileName));
-			gso.setImg(blueTarantulaImg);
 			
 			gso.addTag(new Tag("Old World"));
 			gso.addTag(new Tag("Arachnid"));
@@ -56,20 +55,21 @@ public class Driver2 {
 			another.addTag(ornamental);
 			another.addTag(notBlue);
 			
-			Collection bugs = new Collection("bugs");
-			bugs.addItem(gso);
-			bugs.addItem(another);
+			Collection bugsTest = new Collection("bugsTest");
+			bugsTest.addItem(gso);
+			bugsTest.addItem(another);
 			
-			System.out.println(bugs.toString());
+			System.out.println(bugsTest.toString());
 			System.out.println("\n");
 			
-			bugs.saveCollection();
-
-			Collection collectionFromFile = bugs.readCollection("bugs");
+			bugsTest.saveCollection();
 			
-			collectionFromFile.setName("bugsSavedThenRetrieved");
+			String newCollectionName = "bugsSavedThenRetrieved";
+			Collection bugsSavedThenRetrieved = bugsTest.readCollection("DatabaseFiles" + File.separator + "bugsTest");
 			
-			System.out.println(collectionFromFile);
+			bugsSavedThenRetrieved.setName(newCollectionName);
+			
+			System.out.println(bugsSavedThenRetrieved);
 			}
 
 }
