@@ -9,6 +9,7 @@ package finalproject;
  *
  */
 import java.awt.Component;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,13 +26,21 @@ public class FileIO extends JPanel {
 	private JFileChooser chooser;
 	private Component frame;
 	ArrayList<Item> list = new ArrayList<>();
+	
+	/**
+	 * baseDirectory will be the current working directory (where the program is)
+	 * This could be changed for example: just "user.dir" to put it at a level higher than
+	 * the directory folder
+	 */
+	public static final String BASE_DIRECTORY = System.getProperty("user.dir") + File.separator + "database";
+	
 
 	/**
 	 * choose a file to open.
 	 * @return 
 	 */
 	public ArrayList<Item> browse() {
-	    chooser = new JFileChooser();
+	    chooser = new JFileChooser(BASE_DIRECTORY);
 	    FileNameExtensionFilter filter = new FileNameExtensionFilter("Takes text files", "txt");
 	    chooser.setFileFilter(filter);
 	    int returnVal = chooser.showOpenDialog(frame);

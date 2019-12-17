@@ -127,7 +127,7 @@ public class Collection implements Serializable {
 	}
 
 	public void saveCollection() throws IOException {
-		String fileName="DatabaseFiles" + File.separator + name;
+		String fileName="database" + File.separator + name;
 		FileOutputStream fout = new FileOutputStream(fileName);
 		ObjectOutputStream oos = new ObjectOutputStream(fout);
 		oos.writeObject(this);
@@ -139,7 +139,7 @@ public class Collection implements Serializable {
 	 * @throws IOException
 	 */
 	public void saveCollection(String relabiveFilePath) throws IOException {
-		String fileName="DatabaseFiles" + File.separator + name;
+		String fileName="database" + File.separator + name;
 		FileOutputStream fout = new FileOutputStream(fileName);
 		ObjectOutputStream oos = new ObjectOutputStream(fout);
 		oos.writeObject(this);
