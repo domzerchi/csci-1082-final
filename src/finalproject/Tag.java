@@ -1,3 +1,8 @@
+/**
+ * a Tag class with a name
+ * @author Stephen Polson
+ * @author Ayden Sinn
+ */
 package projectfinal;
 
 import java.util.Comparator;
