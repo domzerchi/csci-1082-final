@@ -28,11 +28,15 @@ public class FileIO extends JPanel {
 	ArrayList<Item> list = new ArrayList<>();
 	
 	/**
-	 * baseDirectory will be the current working directory (where the program is)
-	 * This could be changed for example: just "user.dir" to put it at a level higher than
-	 * the directory folder
+	 * baseDirectory will be the current working directory (where the program is and the default location java uses for files)
+	 * 
 	 */
-	public static final String BASE_DIRECTORY = System.getProperty("user.dir") + File.separator + "database";
+	public static final String BASE_DIRECTORY = System.getProperty("user.dir");
+	/**
+	 * dataDirectory will be where we put the data, maybe. It may work in combination with BASE_DIRECTORY at times,
+	 * for example in the JFileChooser
+	 */
+	public static final String DATA_DIRECTORY = "database";
 	
 
 	/**
@@ -40,7 +44,7 @@ public class FileIO extends JPanel {
 	 * @return 
 	 */
 	public ArrayList<Item> browse() {
-	    chooser = new JFileChooser(BASE_DIRECTORY);
+	    chooser = new JFileChooser(BASE_DIRECTORY + File.separator + DATA_DIRECTORY);
 	    FileNameExtensionFilter filter = new FileNameExtensionFilter("Takes text files", "txt");
 	    chooser.setFileFilter(filter);
 	    int returnVal = chooser.showOpenDialog(frame);
@@ -90,7 +94,9 @@ public class FileIO extends JPanel {
 	public void writeTo(String name, ArrayList<Item> clxn) {
 		PrintWriter pw = null;
 		try {
-			pw = new PrintWriter(new FileOutputStream(name + ".txt"));
+			//maybe this is what we want it to do? just a guess, I don't exactly understand this
+			//pw = new PrintWriter(new FileOutputStream(name + ".txt"));
+			pw = new PrintWriter(new FileOutputStream(DATA_DIRECTORY + File.separator + name + ".txt"));
 			for(Item i: clxn) {
 				String str = i.getName() + "#%"
 						+ i.getType() + "#%";

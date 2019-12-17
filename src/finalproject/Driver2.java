@@ -87,7 +87,7 @@ public class Driver2 {
 			bugsTest.saveCollection();
 			
 			String newCollectionName = "bugsSavedThenRetrieved";
-			Collection bugsSavedThenRetrieved = bugsTest.readCollection("database" + File.separator + "bugsTest");
+			Collection bugsSavedThenRetrieved = bugsTest.readCollection(FileIO.DATA_DIRECTORY + File.separator + "bugsTest");
 			
 			bugsSavedThenRetrieved.setName(newCollectionName);
 			
