@@ -1,3 +1,8 @@
+/**
+ * An Item class that keeps track of an item's name, note, type, and an arraylist of tags.
+ * @author Stephen Polson
+ * @author Ayden Sinn
+ */
 package finalproject;
 
 import java.io.Serializable;
@@ -7,11 +12,6 @@ import java.util.Comparator;
 
 public class Item implements Serializable {
 
-	/**
-	 * @author stephenpolson
-	 * @author ayden sinn
-	 */
-	
 	private String name;
 	private String note;
 	private String type;
@@ -49,19 +49,18 @@ public class Item implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-
 	/**
 	 * accessor for tags
 	 * @return tags
-	 */ // create deep copy?
+	 */
 	public ArrayList<Tag> getTags() {
 		return tags;
 	}
 
 
 	/**
-	 * @param tag Tag to add to Array List tags
-	 * @return add was successful or not
+	 * @param tag will be added to ArrayList tags
+	 * @return true if tag was successfully added, false otherwise
 	 */
 	public boolean addTag(Tag tag) {
 		if (!tags.contains(tag)) {
@@ -72,12 +71,12 @@ public class Item implements Serializable {
 		}
 		return false;
 	}
-	
-	/**
-	 * @param name name of new Tag to create and add to Array List tags
-	 * @return add was successful or not
-	 */
 
+	/**
+	 * Creates a tag, adds it to tags, then sorts tags
+	 * @param name name of new Tag to add to tags
+	 * @return true if tag was successfully added, false otherwise
+	 */
 	public boolean addTag(String name) {
 		Tag tag = new Tag(name);
 		if (!tags.contains(tag)) {
@@ -88,7 +87,12 @@ public class Item implements Serializable {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * creates a tag, removes it from tags, then sorts tags
+	 * @param name of the tag to be removed
+	 * @return true if tag was successfully removed, false otherwise
+	 */
 	public boolean removeTag(String name) {
 		Tag tag = new Tag(name);
 		if (tags.remove(tag)) {
@@ -98,6 +102,12 @@ public class Item implements Serializable {
 			return false;
 		}
 	}
+
+	/**
+	 * compares tags to another ArrayList
+	 * @param tagList is the ArrayList to be compared with tags
+	 * @return true if tags contains all the tags in tagList, false otherwise
+	 */
 	public boolean hasTags(ArrayList<Tag> tagList) { // hasn't been tested
 		for (Tag t: tagList) {
 			if (!tags.contains(t)) {
@@ -124,9 +134,8 @@ public class Item implements Serializable {
 	}
 
 	/**
-	 * equals() should return true as long as the name matches. It has to be like that for searching to work.
-	 * If we discover this is going to be an issue, we should specifically create a message (exactlyEquals()?)
-	 * that makes sure they are exactly the same.
+	 * equals() should return true as long as the name matches.
+	 * It has to be like that for searching to work.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -148,21 +157,20 @@ public class Item implements Serializable {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-	
+
 	public static Comparator<Item> CompareByName = new Comparator<Item>() {
 		@Override
 		public int compare(Item o1, Item o2) {
 			return o1.getName().compareToIgnoreCase(o2.getName());
 		}
 	};
-
 	public static Comparator<Item> CompareByType = new Comparator<Item>() {
 		@Override
 		public int compare(Item o1, Item o2) {
 			return o1.getType().compareToIgnoreCase(o2.getType());
 		}
 	};
-	
+
 	public class TagEnteredTwiceException extends Exception {
 		private static final long serialVersionUID = 1L;
 		public TagEnteredTwiceException() {
