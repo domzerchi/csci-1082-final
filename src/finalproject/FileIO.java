@@ -1,15 +1,11 @@
 /**
- * 
+ * A class that writes Item arraylists to files and converts files to Item arraylists.
+ * @author Stephen Polson
+ * @author Ayden Sinn
  */
 package finalproject;
 
-/**
- * @author stephenpolson
- * code for choosing a file or directory
- *
- */
 import java.awt.Component;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,25 +22,13 @@ public class FileIO extends JPanel {
 	private JFileChooser chooser;
 	private Component frame;
 	ArrayList<Item> list = new ArrayList<>();
-	
-	/**
-	 * BASE_DIRECTORY is the current working directory (where the program is and the default location java uses for files)
-	 * 
-	 */
-	public static final String BASE_DIRECTORY = System.getProperty("user.dir");
-	/**
-	 * DATA_DIRECTORY will be where we put the data, maybe. It may work in combination with BASE_DIRECTORY at times,
-	 * for example in the JFileChooser
-	 */
-	public static final String DATA_DIRECTORY = "database";
-	
 
 	/**
 	 * choose a file to open.
-	 * @return 
+	 * @return list
 	 */
 	public ArrayList<Item> browse() {
-	    chooser = new JFileChooser(BASE_DIRECTORY + File.separator + DATA_DIRECTORY);
+	    chooser = new JFileChooser();
 	    FileNameExtensionFilter filter = new FileNameExtensionFilter("Takes text files", "txt");
 	    chooser.setFileFilter(filter);
 	    int returnVal = chooser.showOpenDialog(frame);
@@ -54,6 +38,11 @@ public class FileIO extends JPanel {
 	    return list;
 	}
 	
+	/**
+	 * reads from a text file and converts it to an arraylist of Items
+	 * @param fName the name of the file
+	 * @return list
+	 */
 	public ArrayList<Item> readFrom(String fName) {
 		Scanner myFile = null;
 		try {
@@ -89,12 +78,15 @@ public class FileIO extends JPanel {
 		return list;
 	}
 	
+	/**
+	 * writes an Item arraylist to a .txt file
+	 * @param name of the file being written to
+	 * @param clxn the arraylist written to the file
+	 */
 	public void writeTo(String name, ArrayList<Item> clxn) {
 		PrintWriter pw = null;
 		try {
-			//maybe this is what we want it to do? just a guess, I don't exactly understand this
-			//pw = new PrintWriter(new FileOutputStream(name + ".txt"));
-			pw = new PrintWriter(new FileOutputStream(DATA_DIRECTORY + File.separator + name + ".txt"));
+			pw = new PrintWriter(new FileOutputStream(name + ".txt"));
 			for(Item i: clxn) {
 				String str = i.getName() + "#%"
 						+ i.getType() + "#%";
