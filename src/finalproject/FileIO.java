@@ -89,8 +89,6 @@ public class FileIO extends JPanel {
 		return list;
 	}
 	
-//	System.out.println(test.replaceAll(System.lineSeparator(),","));
-	
 	public void writeTo(String name, ArrayList<Item> clxn) {
 		PrintWriter pw = null;
 		try {
@@ -103,7 +101,7 @@ public class FileIO extends JPanel {
 				// get note
 				String temp = i.getNote();
 				temp = temp.replace("\n", "&%");
-				str += temp;
+				str += temp + "#%";
 				for (Tag t: i.getTags()) {
 					str += t.getTag();
 					str += "#%";
