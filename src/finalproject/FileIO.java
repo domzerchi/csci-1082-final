@@ -27,14 +27,13 @@ public class FileIO extends JPanel {
 	ArrayList<Item> list = new ArrayList<>();
 	
 	public static final String BASE_DIRECTORY = System.getProperty("user.dir");
-	public static final String DATA_DIRECTORY = "database";
 
 	/**
 	 * choose a file to open.
 	 * @return list
 	 */
 	public ArrayList<Item> browse() {
-	    chooser = new JFileChooser(BASE_DIRECTORY + File.separator + DATA_DIRECTORY);
+	    chooser = new JFileChooser(BASE_DIRECTORY);
 	    FileNameExtensionFilter filter = new FileNameExtensionFilter("Takes text files", "txt");
 	    chooser.setFileFilter(filter);
 	    int returnVal = chooser.showOpenDialog(frame);
