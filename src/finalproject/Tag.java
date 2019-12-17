@@ -1,11 +1,9 @@
-package finalproject;
+package projectfinal;
 
-import java.io.Serializable;
 import java.util.Comparator;
 
-public class Tag implements Serializable {
-	// in order for saving and opening collections to work, not only does Collection have to be serializable
-	// but so do the classes in Collection
+public class Tag {
+
 	private String name;
 
 	// constructor for a tag
@@ -14,6 +12,7 @@ public class Tag implements Serializable {
 		this.name = name;
 	}
 
+	// accessor and mutator for tag
 	public String getTag() {
 		return name;
 	}
@@ -21,20 +20,30 @@ public class Tag implements Serializable {
 		this.name = name;
 	}
 
+	/**
+	 * equals() should return true as long as name matches.
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof Tag))
-			return false;
-		Tag tag = (Tag) obj;
-		boolean isEqual = this.getTag().equals(tag.getTag());
-		return isEqual;
+		if (obj != null) {
+			if (getClass() == obj.getClass()) {
+				Tag other = (Tag) obj;	
+				if (name.equals(other.name)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
-
+	
+	/**
+	 * returns the name of a tag
+	 */
 	@Override
 	public String toString() {
 		return getTag();
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -50,4 +59,3 @@ public class Tag implements Serializable {
 		}
 	};
 
-}
