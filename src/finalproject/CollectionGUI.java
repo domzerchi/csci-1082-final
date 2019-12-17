@@ -11,16 +11,19 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
+import javax.swing.JRadioButton;
 
 //import edu.century.pa5.Product;
 
@@ -46,10 +49,7 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	private JTextField searchTagFld;
 	private JTextField addItemFld;
 	private JTextField deleteItemFld;
-	
-	private JCheckBox nameChkbx;
 	private JCheckBox tagChkbx;
-	private JCheckBox typeChkbx;
 	
 	private JButton ClxnBtn;
 	private JButton newItemBtn;
@@ -74,14 +74,12 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	private ArrayList<Item> collection = new ArrayList<>();
 	private ArrayList<Tag> tagBtns = new ArrayList<>();
 	private FileIO file = new FileIO();
-	
-	private boolean nameX = true;
-	private boolean tagX = false;
-	private boolean typeX = false;
+
 	private JTextField clxnFld;
 	private JPanel filePnl;
 	private JButton SaveBtn;
-
+	private JRadioButton nameRbtn;
+	private JRadioButton typeRbtn;
 	
 	/**
 	 * Launch the application.
@@ -158,18 +156,22 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		searchByLbl = new JLabel("Search by:");
 		searchByPnl.add(searchByLbl);
 		
-		nameChkbx = new JCheckBox("Name");
-		nameChkbx.setBackground(Color.WHITE);
-		nameChkbx.setSelected(true);
-		searchByPnl.add(nameChkbx);
+		nameRbtn = new JRadioButton("Name");
+		nameRbtn.setSelected(true);
+		nameRbtn.setBackground(Color.WHITE);
+		searchByPnl.add(nameRbtn);
+		
+		typeRbtn = new JRadioButton("Type");
+		typeRbtn.setBackground(Color.WHITE);
+		searchByPnl.add(typeRbtn);
+		
+		ButtonGroup group = new ButtonGroup();
+		group.add(nameRbtn);
+		group.add(typeRbtn);
 		
 		tagChkbx = new JCheckBox("Tag");
 		tagChkbx.setBackground(Color.WHITE);
 		searchByPnl.add(tagChkbx);
-		
-		typeChkbx = new JCheckBox("Type");
-		typeChkbx.setBackground(Color.WHITE);
-		searchByPnl.add(typeChkbx);
 		
 		deleteItemPnl = new JPanel();
 		deleteItemPnl.setBackground(Color.WHITE);
@@ -289,8 +291,6 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	// sets action listeners
 	private void setActionListener() {
 		searchFld.addActionListener(this);
-		nameChkbx.addActionListener(this);
-		typeChkbx.addActionListener(this);
 		deleteItemFld.addActionListener(this);
 		addItemFld.addActionListener(this);
 		searchTagFld.addActionListener(this);
@@ -307,12 +307,6 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == searchFld) {
 			search();
-		} else if (event.getSource() == nameChkbx) {
-			checkBox(nameX);
-		} else if (event.getSource() == tagChkbx) {
-			checkBox(tagX);
-		} else if (event.getSource() == typeChkbx) {
-			checkBox(typeX);
 		} else if (event.getSource() == deleteItemFld) {
 			deleteItem(event);
 		} else if (event.getSource() == addItemFld) {
@@ -339,41 +333,34 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	}
 
 	private void search() {
-		ArrayList<Item> searchResults = new ArrayList<>();
-		// check name
-		if (nameX) {
-			Item i = new Item(searchFld.getText());
-			if (collection.contains(i)) {
-				searchResults.add(i);
-			}
-		// check type
-		}
-		if (typeX) { // not tested yet
-			for (Item i: collection) {
-				if (i.getType().equals(searchFld.getText())) {
+		if (searchFld.getText().trim().isEmpty()) {
+			updateDisplay(collection);
+		} else {
+			ArrayList<Item> searchResults = new ArrayList<>();
+			if (nameRbtn.isSelected()) {
+				Item i = new Item(searchFld.getText());
+				if (collection.contains(i)) {
 					searchResults.add(i);
 				}
-			}
-		}
-		// check tags
-		if (tagX) { // not tested yet
-			ArrayList<Item> toRemove = new ArrayList<>();
-			for (Item i: searchResults) {
-				if (!i.hasTags(tagBtns)) {
-					toRemove.add(i);
+			} else if (typeRbtn.isSelected()){
+				for (Item i: collection) {
+					if (i.getType().equals(searchFld.getText())) {
+						searchResults.add(i);
+					}
 				}
 			}
-			searchResults.removeAll(toRemove);
+			if (tagChkbx.isSelected()) {
+				ArrayList<Item> toRemove = new ArrayList<>();
+				for (Item i: searchResults) {
+					if (!i.hasTags(tagBtns)) {
+						toRemove.add(i);
+					}
+				}
+				searchResults.removeAll(toRemove);
+			}
+			updateDisplay(searchResults);
+			searchFld.setText("");	
 		}
-		updateDisplay(searchResults);
-		searchFld.setText("");
-	}
-	
-	private void checkBox(boolean x) {
-		if (x == false)
-			x = true;
-		else
-			x = false;
 	}
 	
 	private void deleteItem(ActionEvent event) {
@@ -400,9 +387,11 @@ public class CollectionGUI extends JFrame implements ActionListener {
 			if (!collection.contains(newItem)) {
 				collection.add(newItem);
 				updateDisplay(collection);
+				addItemFld.setText("");
+			} else {
+				JOptionPane.showMessageDialog(null, "Item already exists!", "", JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		addItemFld.setText("");
 	}
 	
 	private void updateDisplay(ArrayList<Item> list) {
@@ -426,10 +415,12 @@ public class CollectionGUI extends JFrame implements ActionListener {
 			if (!tagBtns.contains(newTag)) {
 				tagBtns.add(newTag);
 				updateSearchTags();
+				search();
+				searchTagFld.setText("");
+			} else {
+				JOptionPane.showMessageDialog(null, "Tag already exists!", "", JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		search();
-		searchTagFld.setText("");
 	}
 
 	private void updateSearchTags() {
@@ -446,12 +437,14 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	}
 
 	private void chooseFile() {
-		collection = file.browse();
+		collection.clear();
+		collection.addAll(file.browse());
 		updateDisplay(collection);
 	}
 	
 	private void saveFile() {
 		file.writeTo(clxnFld.getText(), collection);
+		JOptionPane.showMessageDialog(null, "Saved!", "", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	// when a tag is clicked, it gets removed.
@@ -473,14 +466,16 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	private void checkItems(ActionEvent event) {
 		Item temp = new Item(event.getActionCommand()); // ugh
 		int index = collection.indexOf(temp);
-		currentItem = collection.get(index);
-		nameFld.setText(currentItem.getName());
-		notesArea.setText(currentItem.getNote());
-		typeFld.setText(currentItem.getType());
-		updateItemTags();
-		
-		searchGui.setVisible(false);
-		itemGui.setVisible(true);
+		if (index != -1) {
+			currentItem = collection.get(index);
+			nameFld.setText(currentItem.getName());
+			notesArea.setText(currentItem.getNote());
+			typeFld.setText(currentItem.getType());
+			updateItemTags();
+			
+			searchGui.setVisible(false);
+			itemGui.setVisible(true);	
+		}
 	}
 
 	private void backToSearch() {
@@ -496,10 +491,12 @@ public class CollectionGUI extends JFrame implements ActionListener {
 			if (!currentItem.getTags().contains(newTag)) {
 				currentItem.addTag(newTag.getTag());
 					updateItemTags();
+					search();
+					addTagFld.setText("");
+			} else {
+				JOptionPane.showMessageDialog(null, "Tag already exists!", "", JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		search();
-		addTagFld.setText("");
 	}
 
 	private void updateItemTags() {
@@ -516,6 +513,7 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	}
 
 	private void checkItemTags(ActionEvent event) {
+		System.out.println("test");
 		if (currentItem != null) {
 		int index = -1;
 		Tag oldTag = new Tag(event.getActionCommand());
@@ -529,7 +527,7 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		}
 		if (index != -1) {
 			currentItem.getTags().remove(index);
-			updateSearchTags();
+			updateItemTags();
 		}
 	}
 	}
