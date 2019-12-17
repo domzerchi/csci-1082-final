@@ -3,7 +3,7 @@
  * @author Stephen Polson
  * @author Ayden Sinn
  */
-package projectfinal;
+package finalproject;
 
 import java.util.Comparator;
 
@@ -62,5 +62,5 @@ public class Tag {
 		public int compare(Tag o1, Tag o2) {
 			return o1.getTag().compareToIgnoreCase(o2.getTag());
 		}
-	};
+	}
 

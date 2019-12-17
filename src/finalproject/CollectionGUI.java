@@ -218,20 +218,9 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		searchTagFld.setColumns(10);
 		
 		tagsPnl = new JPanel();
-		
-		JScrollPane tagsScrollPane = new JScrollPane(tagsPnl);
-		
 		tagsPnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tagsPnl.setBackground(Color.WHITE);
-		
-		//making width smaller than SearchEdit panel PREVENTS horizontal scoll bars;
-		//but making height bigger than SearchEditPnl does not FORCE vertical scrollbars
-		tagsPnl.setMinimumSize(new Dimension(searchEditPnlWidth-5, searchEditPnlHeight+5));
-		tagsPnl.setPreferredSize(new Dimension(searchEditPnlWidth-5, searchEditPnlHeight+5));
-		tagsPnl.setMaximumSize(new Dimension(searchEditPnlWidth-5, searchEditPnlHeight*2));
-		
-		//searchEditPnl.add(tagsPnl, BorderLayout.CENTER);
-		searchEditPnl.add(tagsScrollPane);
+		searchEditPnl.add(tagsPnl, BorderLayout.CENTER);
 		
 		
 		displayPnl = new JPanel(); // not scrollable because I am not smart
