@@ -28,12 +28,12 @@ public class FileIO extends JPanel {
 	ArrayList<Item> list = new ArrayList<>();
 	
 	/**
-	 * baseDirectory will be the current working directory (where the program is and the default location java uses for files)
+	 * BASE_DIRECTORY is the current working directory (where the program is and the default location java uses for files)
 	 * 
 	 */
 	public static final String BASE_DIRECTORY = System.getProperty("user.dir");
 	/**
-	 * dataDirectory will be where we put the data, maybe. It may work in combination with BASE_DIRECTORY at times,
+	 * DATA_DIRECTORY will be where we put the data, maybe. It may work in combination with BASE_DIRECTORY at times,
 	 * for example in the JFileChooser
 	 */
 	public static final String DATA_DIRECTORY = "database";
