@@ -28,7 +28,7 @@ public class FileIO extends JPanel {
 	 * @return list
 	 */
 	public ArrayList<Item> browse() {
-	    chooser = new JFileChooser();
+	    chooser = new JFileChooser(BASE_DIRECTORY + File.separator + DATA_DIRECTORY);
 	    FileNameExtensionFilter filter = new FileNameExtensionFilter("Takes text files", "txt");
 	    chooser.setFileFilter(filter);
 	    int returnVal = chooser.showOpenDialog(frame);
@@ -86,14 +86,14 @@ public class FileIO extends JPanel {
 	public void writeTo(String name, ArrayList<Item> clxn) {
 		PrintWriter pw = null;
 		try {
-			pw = new PrintWriter(new FileOutputStream(name + ".txt"));
+			pw = new PrintWriter(new FileOutputStream(DATA_DIRECTORY + File.separator + name + ".txt"));
 			for(Item i: clxn) {
 				String str = i.getName() + "#%"
 						+ i.getType() + "#%";
 				// get note
 				String temp = i.getNote();
 				temp = temp.replace("\n", "&%");
-				str += temp + "#%";
+				str += temp;
 				for (Tag t: i.getTags()) {
 					str += t.getTag();
 					str += "#%";
