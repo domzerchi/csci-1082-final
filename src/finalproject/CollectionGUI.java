@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -20,10 +21,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 
 //import edu.century.pa5.Product;
 
@@ -113,7 +116,9 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		
 		searchEditPnl = new JPanel();
 		searchGui.add(searchEditPnl, BorderLayout.EAST);
-		searchEditPnl.setPreferredSize(new Dimension(250, 100));
+		int searchEditPnlWidth=250;
+		int searchEditPnlHeight=100;
+		searchEditPnl.setPreferredSize(new Dimension(searchEditPnlWidth, searchEditPnlHeight));
 		searchEditPnl.setLayout(new BorderLayout(0, 0));
 		
 		searchSettingsPnl = new JPanel();
@@ -213,9 +218,21 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		searchTagFld.setColumns(10);
 		
 		tagsPnl = new JPanel();
+		
+		JScrollPane tagsScrollPane = new JScrollPane(tagsPnl);
+		
 		tagsPnl.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tagsPnl.setBackground(Color.WHITE);
-		searchEditPnl.add(tagsPnl, BorderLayout.CENTER);
+		
+		//making width smaller than SearchEdit panel PREVENTS horizontal scoll bars;
+		//but making height bigger than SearchEditPnl does not FORCE vertical scrollbars
+		tagsPnl.setMinimumSize(new Dimension(searchEditPnlWidth-5, searchEditPnlHeight+5));
+		tagsPnl.setPreferredSize(new Dimension(searchEditPnlWidth-5, searchEditPnlHeight+5));
+		tagsPnl.setMaximumSize(new Dimension(searchEditPnlWidth-5, searchEditPnlHeight*2));
+		
+		//searchEditPnl.add(tagsPnl, BorderLayout.CENTER);
+		searchEditPnl.add(tagsScrollPane);
+		
 		
 		displayPnl = new JPanel(); // not scrollable because I am not smart
 		searchGui.add(displayPnl, BorderLayout.CENTER);
