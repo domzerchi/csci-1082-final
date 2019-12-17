@@ -1,3 +1,8 @@
+/**
+ * diplays a GUI that allows a person to edit an arraylist of items.
+ * @author Ayden Sinn
+ * @author Stephen Polson
+ */
 package finalproject;
 
 import java.awt.BorderLayout;
@@ -11,7 +16,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,14 +25,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-
-//import edu.century.pa5.Product;
 
 public class CollectionGUI extends JFrame implements ActionListener {
 
@@ -55,7 +55,6 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	private JCheckBox tagChkbx;
 	
 	private JButton ClxnBtn;
-	private JButton newItemBtn;
 	
 	private JPanel searchGui;
 	private JPanel itemGui;
@@ -77,7 +76,7 @@ public class CollectionGUI extends JFrame implements ActionListener {
 	private ArrayList<Item> collection = new ArrayList<>();
 	private ArrayList<Tag> tagBtns = new ArrayList<>();
 	private FileIO file = new FileIO();
-
+	
 	private JTextField clxnFld;
 	private JPanel filePnl;
 	private JButton SaveBtn;
@@ -116,9 +115,7 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		
 		searchEditPnl = new JPanel();
 		searchGui.add(searchEditPnl, BorderLayout.EAST);
-		int searchEditPnlWidth=250;
-		int searchEditPnlHeight=100;
-		searchEditPnl.setPreferredSize(new Dimension(searchEditPnlWidth, searchEditPnlHeight));
+		searchEditPnl.setPreferredSize(new Dimension(250, 100));
 		searchEditPnl.setLayout(new BorderLayout(0, 0));
 		
 		searchSettingsPnl = new JPanel();
@@ -222,7 +219,6 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		tagsPnl.setBackground(Color.WHITE);
 		searchEditPnl.add(tagsPnl, BorderLayout.CENTER);
 		
-		
 		displayPnl = new JPanel(); // not scrollable because I am not smart
 		searchGui.add(displayPnl, BorderLayout.CENTER);
 		displayPnl.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -294,7 +290,9 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		setActionListener();
 	}
 	
-	// sets action listeners
+	/**
+	 * set action listeners
+	 */
 	private void setActionListener() {
 		searchFld.addActionListener(this);
 		deleteItemFld.addActionListener(this);
@@ -308,13 +306,14 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		typeFld.addActionListener(this);
 		addTagFld.addActionListener(this);
 	}
+
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == searchFld) {
 			search();
 		} else if (event.getSource() == deleteItemFld) {
-			deleteItem(event);
+			deleteItem();
 		} else if (event.getSource() == addItemFld) {
 			addItem();
 		} else if (event.getSource() == searchTagFld) {
@@ -330,7 +329,7 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		} else if (event.getSource() == typeFld) {
 			currentItem.setType(typeFld.getText());
 		} else if (event.getSource() == addTagFld) {
-			addItemTag(event);
+			addItemTag();
 		} else {
 			checkItemTags(event);
 			checkTags(event);
@@ -338,38 +337,51 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		}
 	}
 
+	/**
+	 * searches through items in collection based on the user's settings
+	 * 
+	 * The searchFld input is compared with either Item names or types depending on
+	 * which radio button is selected.
+	 * 
+	 * tags are checked if tagChkbx is selected. If any items in the arrayList
+	 * don't have all the tags in tagbtns, they're removed from searchResults.
+	 * 
+	 * Once everything searchResults is ready, it's displayed to displayPnl
+	 */
 	private void search() {
-		if (searchFld.getText().trim().isEmpty()) {
-			updateDisplay(collection);
-		} else {
-			ArrayList<Item> searchResults = new ArrayList<>();
-			if (nameRbtn.isSelected()) {
-				Item i = new Item(searchFld.getText());
-				if (collection.contains(i)) {
+		ArrayList<Item> searchResults = new ArrayList<>();
+		if (nameRbtn.isSelected()) {
+			Item i = new Item(searchFld.getText());
+			if (collection.contains(i)) {
+				searchResults.add(i);
+			}
+		} else if (typeRbtn.isSelected()){
+			for (Item i: collection) {
+				if (i.getType().equals(searchFld.getText())) {
 					searchResults.add(i);
 				}
-			} else if (typeRbtn.isSelected()){
-				for (Item i: collection) {
-					if (i.getType().equals(searchFld.getText())) {
-						searchResults.add(i);
-					}
-				}
 			}
-			if (tagChkbx.isSelected()) {
-				ArrayList<Item> toRemove = new ArrayList<>();
-				for (Item i: searchResults) {
-					if (!i.hasTags(tagBtns)) {
-						toRemove.add(i);
-					}
-				}
-				searchResults.removeAll(toRemove);
-			}
-			updateDisplay(searchResults);
-			searchFld.setText("");	
 		}
+		if (tagChkbx.isSelected()) {
+			ArrayList<Item> toRemove = new ArrayList<>();
+			for (Item i: searchResults) {
+				if (!i.hasTags(tagBtns)) {
+					toRemove.add(i);
+				}
+			}
+			searchResults.removeAll(toRemove);
+		}
+		updateDisplay(searchResults);
+		searchFld.setText("");	
 	}
 	
-	private void deleteItem(ActionEvent event) {
+	/**
+	 * searches collection for an item to delete.
+	 * 
+	 * If the item is successfully removed from collection, displayFld is updated.
+	 * Otherwise, an error message notifies the user that the item doesn't exist.
+	 */
+	private void deleteItem() {
 		int index = -1;
 		Item oldItem = new Item(deleteItemFld.getText());
 		for (Item i: collection) {
@@ -381,10 +393,18 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		if (index != -1) {
 			collection.remove(index);
 			updateDisplay(collection);
+			deleteItemFld.setText("");
+		} else {
+			JOptionPane.showMessageDialog(null, "Item doesn't exists!", "", JOptionPane.ERROR_MESSAGE);
 		}
-		deleteItemFld.setText("");
 	}
 
+	/**
+	 * Adds an item to collection.
+	 * 
+	 * If the item is successfully added to collection, displayFld is updated.
+	 * Otherwise, an error message notifies the user that the item already exists.
+	 */
 	private void addItem() {
 		Item newItem = new Item(addItemFld.getText());
 		// items only get created if they have a name
@@ -400,13 +420,16 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		}
 	}
 	
+	/**
+	 * clears displayPnl, then sorts list and displays everything to displayPnl.
+	 * @param list will be displayed to displayPnl.
+	 */
 	private void updateDisplay(ArrayList<Item> list) {
 		Collections.sort(list, Item.CompareByName);
 		list.trimToSize();
 		displayPnl.removeAll();
 		for (Item i: list) {
 			JButton iBtn = new JButton(i.getName());
-//			iBtn.setPreferredSize(new Dimension(100, 100));
 			iBtn.addActionListener(this);
 			displayPnl.add(iBtn);
 		}
@@ -414,7 +437,10 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		displayPnl.revalidate();
 	}
 	
-	// adds a tag to the tags panel.
+	/**
+	 * calls updateSearchTags() if the tag doesn't already exist.
+	 * Otherwise, an error message shows.
+	 */
 	private void addSearchTag() {
 		Tag newTag = new Tag(searchTagFld.getText());
 		if (!searchTagFld.getText().trim().isEmpty()) {
@@ -429,6 +455,9 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		}
 	}
 
+	/**
+	 * clears tagsPnl, then sorts tagBtns and displays everything to tagsPnl.
+	 */
 	private void updateSearchTags() {
 		Collections.sort(tagBtns, Tag.CompareByTag);
 		tagBtns.trimToSize();
@@ -442,18 +471,28 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		tagsPnl.revalidate();
 	}
 
+	/**
+	 * replaces the current collection with the arraylist returned from a file,
+	 * then calls updateDisplay().
+	 */
 	private void chooseFile() {
 		collection.clear();
 		collection.addAll(file.browse());
 		updateDisplay(collection);
 	}
 	
+	/**
+	 * passes collection to a method in FileIO to be saved.
+	 */
 	private void saveFile() {
 		file.writeTo(clxnFld.getText(), collection);
 		JOptionPane.showMessageDialog(null, "Saved!", "", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	// when a tag is clicked, it gets removed.
+	/**
+	 * when a tag is clicked, it gets removed from tagBtns.
+	 * @param event is turned into a temporary tag and compared with the tags in tagBtns.
+	 */
 	private void checkTags(ActionEvent event) {
 		int index = -1;
 		Tag oldTag = new Tag(event.getActionCommand());
@@ -469,8 +508,12 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		}
 	}
 	
+	/**
+	 * when an item is clicked, itemGui is set visible with the item's information on it.
+	 * @param event is turned into a temporary item and compared with the items in collection.
+	 */
 	private void checkItems(ActionEvent event) {
-		Item temp = new Item(event.getActionCommand()); // ugh
+		Item temp = new Item(event.getActionCommand());
 		int index = collection.indexOf(temp);
 		if (index != -1) {
 			currentItem = collection.get(index);
@@ -484,14 +527,24 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		}
 	}
 
+	/**
+	 * An item's note, name and type are saved,
+	 * searchGui is set visible and displayPnl is updated.
+	 */
 	private void backToSearch() {
 		currentItem.setNote(notesArea.getText());
+		currentItem.setName(nameFld.getText());
+		currentItem.setType(typeFld.getText());
 		itemGui.setVisible(false);
 		searchGui.setVisible(true);
 		updateDisplay(collection);
 	}
 
-	private void addItemTag(ActionEvent event) {
+	/**
+	 * calls updateItemTags() if the tag doesn't already exist.
+	 * Otherwise, an error message shows.
+	 */
+	private void addItemTag() {
 		Tag newTag = new Tag(addTagFld.getText());
 		if (!addTagFld.getText().trim().isEmpty()) {
 			if (!currentItem.getTags().contains(newTag)) {
@@ -505,6 +558,9 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		}
 	}
 
+	/**
+	 * clears itemTagsPnl, then adds all the tags of currentItem to itemTagsPnl.
+	 */
 	private void updateItemTags() {
 		Collections.sort(currentItem.getTags(), Tag.CompareByTag);
 		currentItem.getTags().trimToSize();
@@ -518,6 +574,10 @@ public class CollectionGUI extends JFrame implements ActionListener {
 		itemTagsPnl.revalidate();
 	}
 
+	/**
+	 * when a tag is clicked, it gets removed from currentItem's tags.
+	 * @param event is turned into a temporary tag and compared with the tags for currentItem.
+	 */
 	private void checkItemTags(ActionEvent event) {
 		System.out.println("test");
 		if (currentItem != null) {
