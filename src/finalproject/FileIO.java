@@ -6,6 +6,7 @@
 package finalproject;
 
 import java.awt.Component;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,11 +18,16 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+
+
 public class FileIO extends JPanel {
 	
 	private JFileChooser chooser;
 	private Component frame;
 	ArrayList<Item> list = new ArrayList<>();
+	
+	public static final String BASE_DIRECTORY = System.getProperty("user.dir");
+	public static final String DATA_DIRECTORY = "database";
 
 	/**
 	 * choose a file to open.
@@ -86,14 +92,14 @@ public class FileIO extends JPanel {
 	public void writeTo(String name, ArrayList<Item> clxn) {
 		PrintWriter pw = null;
 		try {
-			pw = new PrintWriter(new FileOutputStream(DATA_DIRECTORY + File.separator + name + ".txt"));
+			pw = new PrintWriter(new FileOutputStream(name + ".txt"));
 			for(Item i: clxn) {
 				String str = i.getName() + "#%"
 						+ i.getType() + "#%";
 				// get note
 				String temp = i.getNote();
 				temp = temp.replace("\n", "&%");
-				str += temp;
+				str += temp + "#%";
 				for (Tag t: i.getTags()) {
 					str += t.getTag();
 					str += "#%";
