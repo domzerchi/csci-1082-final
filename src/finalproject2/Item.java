@@ -3,7 +3,7 @@
  * @author Stephen Polson
  * @author Ayden Sinn
  */
-package finalproject;
+package finalproject2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,48 +16,58 @@ public class Item implements Serializable {
 	private String note;
 	private String type;
 	private ArrayList<Tag> tags;
-	
-	public static final String DEFAULT_NOTE = "note";
-	public static final String DEFAULT_TYPE = "type";
+	public static final String DEFAULT_NOTE = "";
 
 	/**
-	 * constructor for an item.
-	 * Items will only ever be created with just a name,
-	 * so there's only one constructor.
+	 * A no-arg constructor is supplied for convenience, but the name, at least, of 
+	 * the item is supposed to be initialized before the item is used or accessed. 
+	 * All items have names.
+	 */
+	public Item() {
+		super();
+		// setName before using
+	}
+
+	/**
 	 * @param name the name of the item
 	 */
 	public Item(String name) {
 		this.name = name;
-		note = DEFAULT_NOTE;
-		type = DEFAULT_TYPE;
+		note = DEFAULT_NOTE;// ...until there is something to say about the item.
+		// type = "type"; No, because what if there is a type "type"?
 		tags = new ArrayList<Tag>();
 	}
 
 	// accessors and mutators
 	public String getName() {
-		return name;
+		return new String(name);
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
 	public String getNote() {
-		return note;
+		return new String(note);
 	}
 	public void setNote(String note) {
 		this.note = note;
 	}
 	public String getType() {
-		return type;
+		return new String (type);
 	}
 	public void setType(String type) {
 		this.type = type;
 	}
 	/**
 	 * accessor for tags
-	 * @return tags
+	 * @return new copy of tags
 	 */
 	public ArrayList<Tag> getTags() {
-		return tags;
+		int size = tags.size();
+		ArrayList<Tag> returnValue = new ArrayList<Tag>();
+		for(int i = 0; i < size; i++) {
+			returnValue.add(tags.get(i));
+		}
+		return returnValue;
 	}
 
 
@@ -123,10 +133,10 @@ public class Item implements Serializable {
 	@Override
 	public String toString() {
 		String info = "Item: " + getName();
-		if(type != null && type != DEFAULT_TYPE) {
+		if(type != null) {
 			info += "\nType: " + getType();
 		}
-		if(note != null && note != DEFAULT_TYPE) {
+		if(note != null && note != DEFAULT_NOTE) {
 			info += "\nNotes: " + getNote();
 		}
 		if(tags.size() > 0) {
